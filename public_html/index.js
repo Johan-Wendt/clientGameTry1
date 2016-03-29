@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:8060/");
+var ws = new WebSocket("ws://127.0.0.1:8070/");
 ws.binaryType = 'arraybuffer';
 
 ws.onopen = function() {
