@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:8050/");
+var ws = new WebSocket("ws://127.0.0.1:8060/");
 ws.binaryType = 'arraybuffer';
 
 ws.onopen = function() {
@@ -7,7 +7,7 @@ ws.onopen = function() {
    // var view = new DataView(apa);
     apa[0] = 19;
     apa[1] = 87;
-    ws.send(123);
+    ws.send(112);
 };
 
 ws.onmessage = function (evt) {
