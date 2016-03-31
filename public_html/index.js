@@ -34,12 +34,13 @@ ws.onmessage = function (evt) {
         var s = evt.data;
         var view = new DataView(s);
         var Uint = view.getUint8(0);
-        player.x = view.getUint8(1);
-        player.y = view.getUint8(2);
-        tail1.x = view.getUint8(3);
-        tail1.y = view.getUint8(4);
-        tail2.x = view.getUint8(5);
-        tail2.y = view.getUint8(6);
+        var length = view.byteLength;
+        var n = 0;
+        while (n < (length - 1) / 2) {
+            player.x[n] = view.getUint8(2 * n + 1);
+            player.y[n] = view.getUint8(2 * n + 2);
+            n ++;
+        }
         draw();
     }
 };
@@ -54,7 +55,7 @@ ws.onerror = function (err) {
 
 function check(e) {
     var code = e.keyCode;
-    
+
 
     switch (code) {
         case upCode:
@@ -78,43 +79,52 @@ function sendAction(actionNumber) {
 }
 
 var player = {
-  color: "#00A",
-  x: 20,
-  y: 20,
-  width: smallestSquareSize,
-  height: smallestSquareSize,
-  draw: function() {
-    context.fillStyle = this.color;
-    context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
-  }
+    color: "#00A",
+    x: {},
+    y: {},
+    width: smallestSquareSize,
+    height: smallestSquareSize,
+    draw: function () {
+        context.fillStyle = this.color;
+        var n = 0;
+
+        while (n < 100) {
+            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+            n++;
+            if (this.x[n] === undefined) {
+                break;
+            }
+        }
+    }
 };
 var tail1 = {
-  color: "#00A",
-  x: 20,
-  y: 20,
-  width: smallestSquareSize,
-  height: smallestSquareSize,
-  draw: function() {
-    context.fillStyle = this.color;
-    context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
-  }
+    color: "#00A",
+    x: 20,
+    y: 20,
+    width: smallestSquareSize,
+    height: smallestSquareSize,
+    draw: function () {
+        context.fillStyle = this.color;
+        context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
+    }
 };
 var tail2 = {
-  color: "#00A",
-  x: 20,
-  y: 20,
-  width: smallestSquareSize,
-  height: smallestSquareSize,
-  draw: function() {
-    context.fillStyle = this.color;
-    context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
-  }
+    color: "#00A",
+    x: {},
+    y: {},
+    width: smallestSquareSize,
+    height: smallestSquareSize,
+    draw: function () {
+        context.fillStyle = this.color;
+        context.fillRect(this.x[0] * smallestSquareSize, this.y[0] * smallestSquareSize, this.width, this.height);
+        context.fillRect(this.x[1] * smallestSquareSize, this.y[1] * smallestSquareSize, this.width, this.height);
+        context.fillRect(this.x[2] * smallestSquareSize, this.y[2] * smallestSquareSize, this.width, this.height);
+    }
 };
 
 function draw() {
-  context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  player.draw();
-  tail1.draw();
-  tail2.draw();
+    context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    player.draw();
+
 }
 
