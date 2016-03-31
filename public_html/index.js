@@ -36,6 +36,10 @@ ws.onmessage = function (evt) {
         var Uint = view.getUint8(0);
         player.x = view.getUint8(1);
         player.y = view.getUint8(2);
+        tail1.x = view.getUint8(3);
+        tail1.y = view.getUint8(4);
+        tail2.x = view.getUint8(5);
+        tail2.y = view.getUint8(6);
         draw();
     }
 };
@@ -84,9 +88,33 @@ var player = {
     context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
   }
 };
+var tail1 = {
+  color: "#00A",
+  x: 20,
+  y: 20,
+  width: smallestSquareSize,
+  height: smallestSquareSize,
+  draw: function() {
+    context.fillStyle = this.color;
+    context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
+  }
+};
+var tail2 = {
+  color: "#00A",
+  x: 20,
+  y: 20,
+  width: smallestSquareSize,
+  height: smallestSquareSize,
+  draw: function() {
+    context.fillStyle = this.color;
+    context.fillRect(this.x * smallestSquareSize, this.y * smallestSquareSize, this.width, this.height);
+  }
+};
 
 function draw() {
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   player.draw();
+  tail1.draw();
+  tail2.draw();
 }
 
