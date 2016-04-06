@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9010/");
+var ws = new WebSocket("ws://127.0.0.1:8013/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
