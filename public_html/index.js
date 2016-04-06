@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:8013/");
+var ws = new WebSocket("ws://127.0.0.1:9010/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -61,7 +61,7 @@ ws.onmessage = function (evt) {
 };
 
 ws.onclose = function () {
-  //  alert("Closed!");
+    //  alert("Closed!");
 };
 
 ws.onerror = function (err) {
@@ -145,10 +145,10 @@ var gameBorders = {
     draw: function () {
         context.fillStyle = this.color;
         var n = 0;
-        
+
 
         while (n < this.x.length) {
-            
+
             context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
             n++;
 
@@ -166,11 +166,11 @@ function draw() {
 
 function handleSwitcher(arr) {
     var happening = -1;
-    while(happening == -1 && arr.length > 1) {
+    while (happening == -1 && arr.length > 1) {
         var happening = arr.shift();
 
     }
-        
+
 
     switch (happening) {
         case 0:
@@ -202,19 +202,22 @@ function handlePlayerPositioning(arr) {
     }
 }
 function handleBonusPositioning(arr) {
-    var happening = arr.shift();
-    //var n = arr.length;
+    speedBonus.x = [];
+    speedBonus.y = [];
     var n = 0;
-    switch (happening) {
-        case 1:
-            speedBonus.x = [];
-            speedBonus.y = [];
-            while (arr.length > 0) {
+    while (arr.length > 0) {
+        var happening = arr.shift();
+
+        switch (happening) {
+            case 1:
+
                 speedBonus.x[n] = arr.shift();
                 speedBonus.y[n] = arr.shift();
                 n++;
-            }
+        }
+
     }
+
 }
 function handleGamePlan(arr) {
     var happening = arr.shift();
