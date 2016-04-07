@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:8013/");
+var ws = new WebSocket("ws://127.0.0.1:9011/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -20,12 +20,15 @@ var context = document.getElementById('canvasId').getContext("2d");
 
 var bonuses = [];
 
+var plays = [];
+
 
 
 window.onload = windowReady;
 
 function windowReady() {
     window.addEventListener("keydown", this.check, false);
+    createPlayers(2);
 }
 
 ws.onopen = function () {
@@ -117,6 +120,23 @@ var player = {
         //   }
     }
 };
+function play(I) {
+    I.color = I.col;
+    I.x = [];
+    I.y = [];
+    I.width = smallestSquareSize;
+    I.height = smallestSquareSize;
+    I.draw = function () {
+        context.fillStyle = this.color;
+        var n = 0;
+
+        while (n < this.x.length) {
+            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+            n++;
+        }
+    };
+    return I;
+}
 var speedBonus = {
     color: "#F5A",
     x: [],
@@ -158,7 +178,10 @@ var gameBorders = {
 
 function draw() {
     context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    player.draw();
+    // player.draw();
+    plays.forEach(function(play) {
+        play.draw();
+    });
     speedBonus.draw();
     gameBorders.draw();
 
@@ -177,7 +200,7 @@ function handleSwitcher(arr) {
             handleGamePlan(arr);
             break;
         case 1:
-            handlePlayerPositioning(arr);
+            handlePlayPositioning(arr);
             break;
         case 2:
             handleBonusPositioning(arr);
@@ -199,6 +222,46 @@ function handlePlayerPositioning(arr) {
                 player.y[n] = arr.shift();
                 n++;
             }
+            ;
+            break;
+        case 2:
+            player.x = [];
+            player.y = [];
+            while (arr.length > 0) {
+                player.x[n] = arr.shift();
+                player.y[n] = arr.shift();
+                n++;
+            }
+            ;
+            break;
+    }
+}
+function handlePlayPositioning(arr) {
+    var happening = arr.shift();
+
+    //var n = arr.length;
+    var n = 0;
+    switch (happening) {
+        case 1:
+            plays[0].x = [];
+            plays[0].y = [];
+            while (arr.length > 0) {
+                plays[0].x[n] = arr.shift();
+                plays[0].y[n] = arr.shift();
+                n++;
+            }
+            ;
+            break;
+        case 2:
+            plays[1].x = [];
+            plays[1].y = [];
+            while (arr.length > 0) {
+                plays[1].x[n] = arr.shift();
+                plays[1].y[n] = arr.shift();
+                n++;
+            }
+            ;
+            break;
     }
 }
 function handleBonusPositioning(arr) {
@@ -230,5 +293,14 @@ function handleGamePlan(arr) {
                 gameBorders.y[gameBorders.y.length] = arr.shift();
                 n++;
             }
+    }
+
+}
+function createPlayers(n) {
+    switch (n) {
+        case 2:
+            plays.unshift(play({col: "#00A"}));
+        case 1:
+            plays.unshift(play({col: "#AAA"}));
     }
 }
