@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9011/");
+var ws = new WebSocket("ws://127.0.0.1:9014/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -6,6 +6,8 @@ var upCode = 38;
 var rightCode = 39;
 var downCode = 40;
 var spaceCode = 32;
+var shootCode = 67;
+var pauseCode = 80;
 
 var playerNumber = 1;
 
@@ -21,6 +23,7 @@ var context = document.getElementById('canvasId').getContext("2d");
 var bonuses = [];
 
 var plays = [];
+var bullets = [];
 
 
 
@@ -89,6 +92,12 @@ function check(e) {
             sendAction(14);
             break;
         case spaceCode:
+            sendAction(35);
+            break;
+            case shootCode:
+            sendAction(45);
+            break;
+        case pauseCode:
             sendAction(25);
             break;
     }
@@ -99,27 +108,7 @@ function sendAction(actionNumber) {
     ws.send(action);
 }
 
-var player = {
-    color: "#00A",
-    x: [],
-    y: [],
-    width: smallestSquareSize,
-    height: smallestSquareSize,
-    draw: function () {
-        context.fillStyle = this.color;
-        var n = 0;
 
-        //    if (this.x.length !== undefined) {
-
-        while (n < this.x.length) {
-            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
-            n++;
-
-
-        }
-        //   }
-    }
-};
 function play(I) {
     I.color = I.col;
     I.x = [];
@@ -156,6 +145,62 @@ var speedBonus = {
 
     }
 };
+var speedBonus = {
+    color: "#F5A",
+    x: [],
+    y: [],
+    width: smallestSquareSize,
+    height: smallestSquareSize,
+    draw: function () {
+        context.fillStyle = this.color;
+        var n = 0;
+
+
+        while (n < this.x.length) {
+            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+            n++;
+
+        }
+
+    }
+};
+var bullet = {
+    color: "#3F9",
+    x: [],
+    y: [],
+    width: smallestSquareSize,
+    height: smallestSquareSize,
+    draw: function () {
+        context.fillStyle = this.color;
+        var n = 0;
+
+
+        while (n < this.x.length) {
+
+            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+            n++;
+
+        }
+    }
+};
+function bul(I) {
+    I.color = I.col;
+    I.x = [];
+    I.y = [];
+    I.width = smallestSquareSize;
+    I.height = smallestSquareSize;
+    I.draw = function () {
+        context.fillStyle = this.color;
+        var n = 0;
+
+        while (n < this.x.length) {
+            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+            n++;
+        }
+    };
+    return I;
+}
+
 var gameBorders = {
     color: "#CCC",
     x: [],
@@ -179,10 +224,12 @@ var gameBorders = {
 function draw() {
     context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     // player.draw();
-    plays.forEach(function(play) {
+    plays.forEach(function (play) {
         play.draw();
     });
     speedBonus.draw();
+    bullet.draw();
+    //  bullet.draw();
     gameBorders.draw();
 
 }
@@ -193,9 +240,11 @@ function handleSwitcher(arr) {
         var happening = arr.shift();
 
     }
+    // console.log(happening);
 
 
     switch (happening) {
+
         case 0:
             handleGamePlan(arr);
             break;
@@ -205,94 +254,136 @@ function handleSwitcher(arr) {
         case 2:
             handleBonusPositioning(arr);
             break;
+        case 3:
+            handleProjectilePositioning(arr);
+            break;
     }
 
 }
-function handlePlayerPositioning(arr) {
-    var happening = arr.shift();
 
-    //var n = arr.length;
-    var n = 0;
-    switch (happening) {
-        case 1:
-            player.x = [];
-            player.y = [];
-            while (arr.length > 0) {
-                player.x[n] = arr.shift();
-                player.y[n] = arr.shift();
-                n++;
-            }
-            ;
-            break;
-        case 2:
-            player.x = [];
-            player.y = [];
-            while (arr.length > 0) {
-                player.x[n] = arr.shift();
-                player.y[n] = arr.shift();
-                n++;
-            }
-            ;
-            break;
-    }
-}
 function handlePlayPositioning(arr) {
-    var happening = arr.shift();
 
-    //var n = arr.length;
-    var n = 0;
-    switch (happening) {
-        case 1:
-            plays[0].x = [];
-            plays[0].y = [];
-            while (arr.length > 0) {
-                plays[0].x[n] = arr.shift();
-                plays[0].y[n] = arr.shift();
-                n++;
-            }
-            ;
-            break;
-        case 2:
-            plays[1].x = [];
-            plays[1].y = [];
-            while (arr.length > 0) {
-                plays[1].x[n] = arr.shift();
-                plays[1].y[n] = arr.shift();
-                n++;
-            }
-            ;
-            break;
+    var totalNumberOFObjects = arr.shift();
+    var moved = 0;
+
+    while (moved < totalNumberOFObjects) {
+        var happening = arr.shift();
+        var numberOfHappening = arr.shift();
+        console.log("player happening = " + numberOfHappening);
+        var n = 0;
+
+        //var n = arr.length;
+        switch (happening) {
+            case 1:
+                plays[0].x = [];
+                plays[0].y = [];
+                while (n < numberOfHappening) {
+
+                    plays[0].x[plays[0].x.length] = arr.shift();
+                    plays[0].y[plays[0].y.length] = arr.shift();
+                    console.log("player plays[0].x.length = " + plays[0].x[plays[0].x.length - 1]);
+                    n++;
+                }
+                break;
+            case 2:
+                plays[1].x = [];
+                plays[1].y = [];
+                while (n < numberOfHappening) {
+                    plays[1].x[plays[1].x.length] = arr.shift();
+                    plays[1].y[plays[1].y.length] = arr.shift();
+                    n++;
+                }
+                break;
+        }
+        moved++;
     }
 }
 function handleBonusPositioning(arr) {
-    speedBonus.x = [];
-    speedBonus.y = [];
-    var n = 0;
-    while (arr.length > 0) {
+    var totalNumberOFDifferentObjects = arr.shift();
+
+
+
+    var k = 0;
+
+    while (k < totalNumberOFDifferentObjects) {
         var happening = arr.shift();
+        var numberOfHappening = arr.shift();
+        var n = 0;
 
         switch (happening) {
             case 1:
+                speedBonus.x = [];
+                    speedBonus.y = [];
+                while (n < numberOfHappening) {
+                    
 
-                speedBonus.x[n] = arr.shift();
-                speedBonus.y[n] = arr.shift();
-                n++;
+                    speedBonus.x[n] = arr.shift();
+                    speedBonus.y[n] = arr.shift();
+                    n++;
+                }
+        }
+        k++;
+
+    }
+
+}
+
+function handleProjectilePositioning(arr) {
+    console.log("bang");
+    var totalNumberOFObjects = arr.shift();
+
+    bullet.x = [];
+    bullet.y = [];
+
+    while (arr.length > 0) {
+        var happening = arr.shift();
+        var numberOfHappening = arr.shift();
+        console.log("happening" + happening);
+        console.log("numberOfHappening" + numberOfHappening);
+        var n = 0;
+
+        switch (happening) {
+            case 1:
+                while (n < numberOfHappening) {
+
+                    bullet.x[n] = arr.shift();
+                    bullet.y[n] = arr.shift();
+                    console.log("bullet.x[n]" + bullet.x[n]);
+                    console.log("bullet.y[n]" + bullet.y[n]);
+                    n++;
+                }
         }
 
     }
 
 }
+
 function handleGamePlan(arr) {
-    var happening = arr.shift();
-    //var n = arr.length;
-    var n = 0;
-    switch (happening) {
-        case 1:
-            while (arr.length > 0) {
-                gameBorders.x[gameBorders.x.length] = arr.shift();
-                gameBorders.y[gameBorders.y.length] = arr.shift();
-                n++;
-            }
+
+    var totalNumberOFObjects = arr.shift();
+    //for now
+    var totalNumberOFObjects = 165;
+
+    while (arr.length > 0) {
+        console.log("Called");
+        var happening = arr.shift();
+
+        var numberOfHappening = arr.shift();
+        //For now
+        numberOfHappening = 165;
+        var n = 0;
+        //var n = arr.length;
+        // var n = 0;
+        switch (happening) {
+            case 1:
+                while (n < numberOfHappening) {
+                    gameBorders.x[gameBorders.x.length] = arr.shift();
+                    gameBorders.y[gameBorders.y.length] = arr.shift();
+                    console.log(gameBorders.x[gameBorders.x.length - 1]);
+                    n++;
+                }
+        }
+
     }
 
 }
