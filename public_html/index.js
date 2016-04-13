@@ -321,6 +321,11 @@ function handleBonusPositioning(arr) {
                     speedBonus.y[n] = arr.shift();
                     n++;
                 }
+                break;
+            default:
+                while (n < numberOfHappening) {
+                    n++;
+                }
         }
         k++;
 
