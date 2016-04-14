@@ -32,6 +32,7 @@ function windowReady() {
     window.addEventListener("keydown", this.check, false);
     createPlayers(2);
     createBonuses();
+    createBullets();
 }
 
 ws.onopen = function () {
@@ -103,25 +104,7 @@ function sendAction(actionNumber) {
     ws.send(action);
 }
 
-
-function play(I) {
-    I.color = I.col;
-    I.x = [];
-    I.y = [];
-    I.width = smallestSquareSize;
-    I.height = smallestSquareSize;
-    I.draw = function () {
-        context.fillStyle = this.color;
-        var n = 0;
-
-        while (n < this.x.length) {
-            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
-            n++;
-        }
-    };
-    return I;
-}
-function bonus(I) {
+function pixel(I) {
     I.color = I.col;
     I.x = [];
     I.y = [];
@@ -139,6 +122,41 @@ function bonus(I) {
     return I;
 }
 /**
+ function play(I) {
+ I.color = I.col;
+ I.x = [];
+ I.y = [];
+ I.width = smallestSquareSize;
+ I.height = smallestSquareSize;
+ I.draw = function () {
+ context.fillStyle = this.color;
+ var n = 0;
+ 
+ while (n < this.x.length) {
+ context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+ n++;
+ }
+ };
+ return I;
+ }
+ function bonus(I) {
+ I.color = I.col;
+ I.x = [];
+ I.y = [];
+ I.width = smallestSquareSize;
+ I.height = smallestSquareSize;
+ I.draw = function () {
+ context.fillStyle = this.color;
+ var n = 0;
+ 
+ while (n < this.x.length) {
+ context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+ n++;
+ }
+ };
+ return I;
+ }
+ /**
  var speedBonus = {
  color: "#F5A",
  x: [],
@@ -158,44 +176,44 @@ function bonus(I) {
  
  }
  };
+ 
+ var bullet = {
+ color: "#3F9",
+ x: [],
+ y: [],
+ width: smallestSquareSize,
+ height: smallestSquareSize,
+ draw: function () {
+ context.fillStyle = this.color;
+ var n = 0;
+ 
+ 
+ while (n < this.x.length) {
+ 
+ context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+ n++;
+ 
+ }
+ }
+ };
+ function bul(I) {
+ I.color = I.col;
+ I.x = [];
+ I.y = [];
+ I.width = smallestSquareSize;
+ I.height = smallestSquareSize;
+ I.draw = function () {
+ context.fillStyle = this.color;
+ var n = 0;
+ 
+ while (n < this.x.length) {
+ context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+ n++;
+ }
+ };
+ return I;
+ }
  **/
-var bullet = {
-    color: "#3F9",
-    x: [],
-    y: [],
-    width: smallestSquareSize,
-    height: smallestSquareSize,
-    draw: function () {
-        context.fillStyle = this.color;
-        var n = 0;
-
-
-        while (n < this.x.length) {
-
-            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
-            n++;
-
-        }
-    }
-};
-function bul(I) {
-    I.color = I.col;
-    I.x = [];
-    I.y = [];
-    I.width = smallestSquareSize;
-    I.height = smallestSquareSize;
-    I.draw = function () {
-        context.fillStyle = this.color;
-        var n = 0;
-
-        while (n < this.x.length) {
-            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
-            n++;
-        }
-    };
-    return I;
-}
-
 var gameBorders = {
     color: "#CCC",
     x: [],
@@ -219,14 +237,17 @@ var gameBorders = {
 function draw() {
     context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     // player.draw();
-    plays.forEach(function (play) {
-        play.draw();
+    plays.forEach(function (pixel) {
+        pixel.draw();
     });
-    bonuses.forEach(function (bonus) {
-        bonus.draw();
+    bonuses.forEach(function (pixel) {
+        pixel.draw();
+    });
+    bullets.forEach(function (pixel) {
+        pixel.draw();
     });
     //speedBonus.draw();
-    bullet.draw();
+    //  bullet.draw();
     //  bullet.draw();
     gameBorders.draw();
 
@@ -352,7 +373,7 @@ function handleBonusPositioning(arr) {
                     n++;
                 }
                 break;
-                case 5:
+            case 5:
                 bonuses[4].x = [];
                 bonuses[4].y = [];
 
@@ -362,7 +383,7 @@ function handleBonusPositioning(arr) {
                     n++;
                 }
                 break;
-                case 6:
+            case 6:
                 bonuses[5].x = [];
                 bonuses[5].y = [];
 
@@ -416,30 +437,31 @@ function handleBonusPositioning(arr) {
 
 function handleProjectilePositioning(arr) {
     var totalNumberOFObjects = arr.shift();
+    var moved = 0;
+    bullets.forEach(function (pixel) {
+        pixel.x = [];
+        pixel.y = [];
+    });
 
-    bullet.x = [];
-    bullet.y = [];
-
-    while (arr.length > 0) {
+    while (moved < totalNumberOFObjects) {
         var happening = arr.shift();
         var numberOfHappening = arr.shift();
-        console.log("happening" + happening);
-        console.log("numberOfHappening" + numberOfHappening);
+
+        
+     //   bullets[happening - 1].x = [];
+      //  bullets[happening - 1].y = [];
+        
         var n = 0;
+        while (n < numberOfHappening) {
 
-        switch (happening) {
-            case 1:
-                while (n < numberOfHappening) {
+            bullets[happening - 1].x[bullets[happening - 1].x.length] = arr.shift();
+            bullets[happening - 1].y[bullets[happening - 1].y.length] = arr.shift();
+            n++;
 
-                    bullet.x[n] = arr.shift();
-                    bullet.y[n] = arr.shift();
-                    console.log("bullet.x[n]" + bullet.x[n]);
-                    console.log("bullet.y[n]" + bullet.y[n]);
-                    n++;
-                }
         }
-
+        moved++;
     }
+
 
 }
 
@@ -475,18 +497,27 @@ function handleGamePlan(arr) {
 function createPlayers(n) {
     switch (n) {
         case 2:
-            plays.unshift(play({col: "#00A"}));
+            plays.unshift(pixel({col: "#00A"}));
         case 1:
-            plays.unshift(play({col: "#AAA"}));
+            plays.unshift(pixel({col: "#AAA"}));
     }
 }
 
 function createBonuses() {
-    bonuses.push(bonus({col: "#F5A"}));
-    bonuses.push(bonus({col: "#FFA"}));
-    bonuses.push(bonus({col: "#123"}));
-    bonuses.push(bonus({col: "#987"}));
-    bonuses.push(bonus({col: "#555"}));
-    bonuses.push(bonus({col: "#1F7"}));
+    bonuses.push(pixel({col: "#F5A"}));
+    bonuses.push(pixel({col: "#FFA"}));
+    bonuses.push(pixel({col: "#123"}));
+    bonuses.push(pixel({col: "#987"}));
+    bonuses.push(pixel({col: "#555"}));
+    bonuses.push(pixel({col: "#1F7"}));
+
+}
+function createBullets() {
+    bullets.push(pixel({col: "#3F9"}));
+    bullets.push(pixel({col: "#3F9"}));
+    bullets.push(pixel({col: "#3F9"}));
+    bullets.push(pixel({col: "#3F9"}));
+    bullets.push(pixel({col: "#3F9"}));
+    bullets.push(pixel({col: "#3F9"}));
 
 }
