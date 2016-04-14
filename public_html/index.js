@@ -362,6 +362,16 @@ function handleBonusPositioning(arr) {
                     n++;
                 }
                 break;
+                case 6:
+                bonuses[5].x = [];
+                bonuses[5].y = [];
+
+                while (n < numberOfHappening) {
+                    bonuses[5].x[bonuses[5].x.length] = arr.shift();
+                    bonuses[5].y[bonuses[5].y.length] = arr.shift();
+                    n++;
+                }
+                break;
         }
         moved++;
     }
@@ -477,5 +487,6 @@ function createBonuses() {
     bonuses.push(bonus({col: "#123"}));
     bonuses.push(bonus({col: "#987"}));
     bonuses.push(bonus({col: "#555"}));
+    bonuses.push(bonus({col: "#1F7"}));
 
 }
