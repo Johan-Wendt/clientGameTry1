@@ -30,7 +30,7 @@ window.onload = windowReady;
 
 function windowReady() {
     window.addEventListener("keydown", this.check, false);
-    createPlayers(2);
+    createPlayers();
     createBonuses();
     createBullets();
 }
@@ -261,7 +261,7 @@ function handleSwitcher(arr) {
     }
     // console.log(happening);
 
-
+/**
     switch (happening) {
 
         case 0:
@@ -277,185 +277,41 @@ function handleSwitcher(arr) {
             handleProjectilePositioning(arr);
             break;
     }
+    **/
+    switch (happening) {
 
-}
-
-function handlePlayPositioning(arr) {
-
-    var totalNumberOFObjects = arr.shift();
-    var moved = 0;
-
-    while (moved < totalNumberOFObjects) {
-        var happening = arr.shift();
-        var numberOfHappening = arr.shift();
-        var n = 0;
-
-        //var n = arr.length;
-        switch (happening) {
-            case 1:
-                plays[0].x = [];
-                plays[0].y = [];
-                while (n < numberOfHappening) {
-
-                    plays[0].x[plays[0].x.length] = arr.shift();
-                    plays[0].y[plays[0].y.length] = arr.shift();
-                    n++;
-                }
-                break;
-            case 2:
-                plays[1].x = [];
-                plays[1].y = [];
-                while (n < numberOfHappening) {
-                    plays[1].x[plays[1].x.length] = arr.shift();
-                    plays[1].y[plays[1].y.length] = arr.shift();
-                    n++;
-                }
-                break;
-        }
-        moved++;
-    }
-}
-function handleBonusPositioning(arr) {
-    var totalNumberOFObjects = arr.shift();
-    var moved = 0;
-    bonuses.forEach(function (bonus) {
-        bonus.x = [];
-        bonus.y = [];
-    });
-
-    while (moved < totalNumberOFObjects) {
-        var happening = arr.shift();
-        var numberOfHappening = arr.shift();
-
-        var n = 0;
-
-        //var n = arr.length;
-        switch (happening) {
-            case 1:
-                bonuses[0].x = [];
-                bonuses[0].y = [];
-                while (n < numberOfHappening) {
-
-                    bonuses[0].x[bonuses[0].x.length] = arr.shift();
-                    bonuses[0].y[bonuses[0].y.length] = arr.shift();
-                    //  console.log("bonuses bonuses[0].x.length = " + bonuses[0].x[bonuses[0].x.length - 1]);
-                    n++;
-                }
-                break;
-            case 2:
-                bonuses[1].x = [];
-                bonuses[1].y = [];
-
-                while (n < numberOfHappening) {
-                    bonuses[1].x[bonuses[1].x.length] = arr.shift();
-                    bonuses[1].y[bonuses[1].y.length] = arr.shift();
-                    n++;
-                }
-                break;
-            case 3:
-                bonuses[2].x = [];
-                bonuses[2].y = [];
-                while (n < numberOfHappening) {
-
-                    bonuses[2].x[bonuses[2].x.length] = arr.shift();
-                    bonuses[2].y[bonuses[2].y.length] = arr.shift();
-                    //  console.log("bonuses bonuses[0].x.length = " + bonuses[0].x[bonuses[0].x.length - 1]);
-                    n++;
-                }
-                break;
-            case 4:
-                bonuses[3].x = [];
-                bonuses[3].y = [];
-
-                while (n < numberOfHappening) {
-                    bonuses[3].x[bonuses[3].x.length] = arr.shift();
-                    bonuses[3].y[bonuses[3].y.length] = arr.shift();
-                    n++;
-                }
-                break;
-            case 5:
-                bonuses[4].x = [];
-                bonuses[4].y = [];
-
-                while (n < numberOfHappening) {
-                    bonuses[4].x[bonuses[4].x.length] = arr.shift();
-                    bonuses[4].y[bonuses[4].y.length] = arr.shift();
-                    n++;
-                }
-                break;
-            case 6:
-                bonuses[5].x = [];
-                bonuses[5].y = [];
-
-                while (n < numberOfHappening) {
-                    bonuses[5].x[bonuses[5].x.length] = arr.shift();
-                    bonuses[5].y[bonuses[5].y.length] = arr.shift();
-                    n++;
-                }
-                break;
-        }
-        moved++;
+        case 0:
+            handleGamePlan(arr);
+            break;
+        case 1:
+            handlePositioning(arr, plays);
+            break;
+        case 2:
+            handlePositioning(arr, bonuses);
+            break;
+        case 3:
+            handlePositioning(arr, bullets);
+            break;
     }
 
 }
-/**
- function handleBonusPositioning(arr) {
- var totalNumberOFDifferentObjects = arr.shift();
- 
- 
- 
- var k = 0;
- 
- while (k < totalNumberOFDifferentObjects) {
- var happening = arr.shift();
- var numberOfHappening = arr.shift();
- var n = 0;
- 
- switch (happening) {
- case 1:
- speedBonus.x = [];
- speedBonus.y = [];
- while (n < numberOfHappening) {
- 
- 
- speedBonus.x[n] = arr.shift();
- speedBonus.y[n] = arr.shift();
- n++;
- }
- break;
- default:
- while (n < numberOfHappening) {
- n++;
- }
- }
- k++;
- 
- }
- 
- }
- **/
-
-function handleProjectilePositioning(arr) {
-    var totalNumberOFObjects = arr.shift();
+function handlePositioning(moves, actor) {
+    var totalNumberOFObjects = moves.shift();
     var moved = 0;
-    bullets.forEach(function (pixel) {
+    actor.forEach(function (pixel) {
         pixel.x = [];
         pixel.y = [];
     });
 
     while (moved < totalNumberOFObjects) {
-        var happening = arr.shift();
-        var numberOfHappening = arr.shift();
-
-        
-     //   bullets[happening - 1].x = [];
-      //  bullets[happening - 1].y = [];
+        var happening = moves.shift();
+        var numberOfHappening = moves.shift();
         
         var n = 0;
         while (n < numberOfHappening) {
 
-            bullets[happening - 1].x[bullets[happening - 1].x.length] = arr.shift();
-            bullets[happening - 1].y[bullets[happening - 1].y.length] = arr.shift();
+            actor[happening - 1].x[actor[happening - 1].x.length] = moves.shift();
+            actor[happening - 1].y[actor[happening - 1].y.length] = moves.shift();
             n++;
 
         }
@@ -464,6 +320,7 @@ function handleProjectilePositioning(arr) {
 
 
 }
+
 
 function handleGamePlan(arr) {
 
@@ -494,13 +351,11 @@ function handleGamePlan(arr) {
     }
 
 }
-function createPlayers(n) {
-    switch (n) {
-        case 2:
-            plays.unshift(pixel({col: "#00A"}));
-        case 1:
-            plays.unshift(pixel({col: "#AAA"}));
-    }
+function createPlayers() {
+    plays.push(pixel({col: "#00A"}));
+    plays.push(pixel({col: "#AAA"}));
+    plays.push(pixel({col: "#123"}));
+    plays.push(pixel({col: "#987"}));
 }
 
 function createBonuses() {
