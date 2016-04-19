@@ -40,16 +40,16 @@ ws.onopen = function () {
 };
 
 ws.onmessage = function (evt) {
-    if (evt.data.constructor.name == "ArrayBuffer") {
-        var s = evt.data;
-        var view = new DataView(s);
+   // if (evt.data.constructor.name == "ArrayBuffer") {
+        var data = evt.data;
+        var view = new DataView(data);
         var dataLength = view.byteLength;
         var actionArrays = [];
         var total = 0;
         var lastSliced = 0;
-        while (total < dataLength) {
-            actionArrays[total] = view.getInt32(total);
-            console.log(actionArrays[total - 1]);
+        while (total * 4 < dataLength) {
+            actionArrays[total] = view.getInt32(total*4);
+           // console.log(actionArrays[total - 1]);
             if (actionArrays[actionArrays.length - 1] == -1) {
                 if (total > lastSliced) {
 
@@ -59,8 +59,11 @@ ws.onmessage = function (evt) {
             }
             total++;
         }
+        actionArrays.forEach(function(element) {
+        console.log(element);
+    });
         draw();
-    }
+  //  }
 };
 
 ws.onclose = function () {
