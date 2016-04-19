@@ -11,10 +11,10 @@ var pauseCode = 80;
 
 var playerNumber = 1;
 
-var smallestSquareSize = 10;
+var smallestSquareSize = 14;
 
 var CANVAS_WIDTH = 1100;
-var CANVAS_HEIGHT = 500;
+var CANVAS_HEIGHT = 600;
 //var padding = 20;
 //var borderThickness = 6;
 //var frameColor = "#000000";
@@ -48,7 +48,8 @@ ws.onmessage = function (evt) {
         var total = 0;
         var lastSliced = 0;
         while (total < dataLength) {
-            actionArrays[total] = view.getInt8(total);
+            actionArrays[total] = view.getInt32(total);
+            console.log(actionArrays[total - 1]);
             if (actionArrays[actionArrays.length - 1] == -1) {
                 if (total > lastSliced) {
 
@@ -108,6 +109,8 @@ function pixel(I) {
     I.color = I.col;
     I.x = [];
     I.y = [];
+    I.offsetX = [];
+    I.offsetY = [];
     I.width = smallestSquareSize;
     I.height = smallestSquareSize;
     I.draw = function () {
@@ -115,105 +118,14 @@ function pixel(I) {
         var n = 0;
 
         while (n < this.x.length) {
+            //context.fillRect(this.x[n] * smallestSquareSize + this.offsetX[n] / smallestSquareSize, this.y[n] * smallestSquareSize + this.offsetY[n] / smallestSquareSize, this.width, this.height);
             context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
             n++;
         }
     };
     return I;
 }
-/**
- function play(I) {
- I.color = I.col;
- I.x = [];
- I.y = [];
- I.width = smallestSquareSize;
- I.height = smallestSquareSize;
- I.draw = function () {
- context.fillStyle = this.color;
- var n = 0;
- 
- while (n < this.x.length) {
- context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
- n++;
- }
- };
- return I;
- }
- function bonus(I) {
- I.color = I.col;
- I.x = [];
- I.y = [];
- I.width = smallestSquareSize;
- I.height = smallestSquareSize;
- I.draw = function () {
- context.fillStyle = this.color;
- var n = 0;
- 
- while (n < this.x.length) {
- context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
- n++;
- }
- };
- return I;
- }
- /**
- var speedBonus = {
- color: "#F5A",
- x: [],
- y: [],
- width: smallestSquareSize,
- height: smallestSquareSize,
- draw: function () {
- context.fillStyle = this.color;
- var n = 0;
- 
- 
- while (n < this.x.length) {
- context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
- n++;
- 
- }
- 
- }
- };
- 
- var bullet = {
- color: "#3F9",
- x: [],
- y: [],
- width: smallestSquareSize,
- height: smallestSquareSize,
- draw: function () {
- context.fillStyle = this.color;
- var n = 0;
- 
- 
- while (n < this.x.length) {
- 
- context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
- n++;
- 
- }
- }
- };
- function bul(I) {
- I.color = I.col;
- I.x = [];
- I.y = [];
- I.width = smallestSquareSize;
- I.height = smallestSquareSize;
- I.draw = function () {
- context.fillStyle = this.color;
- var n = 0;
- 
- while (n < this.x.length) {
- context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
- n++;
- }
- };
- return I;
- }
- **/
+
 var gameBorders = {
     color: "#CCC",
     x: [],
@@ -246,10 +158,8 @@ function draw() {
     bullets.forEach(function (pixel) {
         pixel.draw();
     });
-    //speedBonus.draw();
-    //  bullet.draw();
-    //  bullet.draw();
-    gameBorders.draw();
+
+   // gameBorders.draw();
 
 }
 
@@ -259,25 +169,7 @@ function handleSwitcher(arr) {
         var happening = arr.shift();
 
     }
-    // console.log(happening);
 
-/**
-    switch (happening) {
-
-        case 0:
-            handleGamePlan(arr);
-            break;
-        case 1:
-            handlePlayPositioning(arr);
-            break;
-        case 2:
-            handleBonusPositioning(arr);
-            break;
-        case 3:
-            handleProjectilePositioning(arr);
-            break;
-    }
-    **/
     switch (happening) {
 
         case 0:
@@ -301,17 +193,23 @@ function handlePositioning(moves, actor) {
     actor.forEach(function (pixel) {
         pixel.x = [];
         pixel.y = [];
+        pixel.offsetX = [];
+        pixel.offsetY = [];
     });
 
     while (moved < totalNumberOFObjects) {
-        var happening = moves.shift();
+        var mover = moves.shift();
+        
         var numberOfHappening = moves.shift();
         
         var n = 0;
         while (n < numberOfHappening) {
 
-            actor[happening - 1].x[actor[happening - 1].x.length] = moves.shift();
-            actor[happening - 1].y[actor[happening - 1].y.length] = moves.shift();
+
+            actor[mover - 1].x[actor[mover - 1].x.length] = moves.shift();
+            actor[mover - 1].offsetX[actor[mover - 1].offsetX.length] = moves.shift();
+            actor[mover - 1].y[actor[mover - 1].y.length] = moves.shift();
+            actor[mover - 1].offsetY[actor[mover - 1].offsetY.length] = moves.shift();
             n++;
 
         }
@@ -323,10 +221,10 @@ function handlePositioning(moves, actor) {
 
 
 function handleGamePlan(arr) {
-
+/**
     var totalNumberOFObjects = arr.shift();
     //for now
-    var totalNumberOFObjects = 165;
+    var totalNumberOFObjects = 165 + 164;
 
     while (arr.length > 0) {
         console.log("Called");
@@ -334,7 +232,7 @@ function handleGamePlan(arr) {
 
         var numberOfHappening = arr.shift();
         //For now
-        numberOfHappening = 165;
+        numberOfHappening = 165 + 164;
         var n = 0;
         //var n = arr.length;
         // var n = 0;
@@ -342,13 +240,15 @@ function handleGamePlan(arr) {
             case 1:
                 while (n < numberOfHappening) {
                     gameBorders.x[gameBorders.x.length] = arr.shift();
+                    var apa = arr.shift();
                     gameBorders.y[gameBorders.y.length] = arr.shift();
-                    console.log(gameBorders.x[gameBorders.x.length - 1]);
+                    var bpa = arr.shift();
                     n++;
                 }
         }
 
     }
+    **/
 
 }
 function createPlayers() {
