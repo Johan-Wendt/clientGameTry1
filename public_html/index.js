@@ -59,9 +59,9 @@ ws.onmessage = function (evt) {
             }
             total++;
         }
-        actionArrays.forEach(function(element) {
-        console.log(element);
-    });
+    //    actionArrays.forEach(function(element) {
+    //    console.log(element);
+   // });
         draw();
   //  }
 };
@@ -167,25 +167,27 @@ function draw() {
 }
 
 function handleSwitcher(arr) {
-    var happening = -1;
-    while (happening == -1 && arr.length > 1) {
-        var happening = arr.shift();
+
+   // var happening = -1;
+    while (arr.length > 0) {
+        var actor = arr.shift();
+        var actInstructions = getNextActInstructions(arr);
 
     }
 
-    switch (happening) {
+    switch (actor) {
 
         case 0:
-            handleGamePlan(arr);
+            handleGamePlan(actInstructions);
             break;
         case 1:
-            handlePositioning(arr, plays);
+            handlePositioning(actInstructions, plays);
             break;
         case 2:
-            handlePositioning(arr, bonuses);
+            handlePositioning(actInstructions, bonuses);
             break;
         case 3:
-            handlePositioning(arr, bullets);
+            handlePositioning(actInstructions, bullets);
             break;
     }
 
@@ -278,4 +280,13 @@ function createBullets() {
     bullets.push(pixel({col: "#3F9"}));
     bullets.push(pixel({col: "#3F9"}));
 
+}
+
+
+
+
+function printArr(array) {
+          array.forEach(function(element) {
+        console.log(element);
+    });
 }
