@@ -191,33 +191,33 @@ function handleSwitcher(arr) {
 
 }
 function handlePositioning(moves, actor) {
-    var totalNumberOFObjects = moves.shift();
+   // var totalNumberOFObjects = moves.shift();
     var moved = 0;
     actor.forEach(function (pixel) {
         pixel.x = [];
         pixel.y = [];
-        pixel.offsetX = [];
-        pixel.offsetY = [];
     });
 
-    while (moved < totalNumberOFObjects) {
+   // while (moved < totalNumberOFObjects) {
         var mover = moves.shift();
         
-        var numberOfHappening = moves.shift();
+      //  var numberOfHappening = moves.shift();
         
-        var n = 0;
-        while (n < numberOfHappening) {
+      //  var n = 0;
+      //  while (n < numberOfHappening) {
 
 
             actor[mover - 1].x[actor[mover - 1].x.length] = moves.shift();
-            actor[mover - 1].offsetX[actor[mover - 1].offsetX.length] = moves.shift();
             actor[mover - 1].y[actor[mover - 1].y.length] = moves.shift();
-            actor[mover - 1].offsetY[actor[mover - 1].offsetY.length] = moves.shift();
-            n++;
+            var blah = moves.shift();
+            var blah = moves.shift();
+            var blah = moves.shift();
+            var blah = moves.shift();
+          //  n++;
 
-        }
+   //     }
         moved++;
-    }
+  //  }
 
 
 }
