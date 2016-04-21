@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9014/");
+var ws = new WebSocket("ws://127.0.0.1:9016/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -24,6 +24,8 @@ var bonuses = [];
 var plays = [];
 var bullets = [];
 
+var instructionsSentPerActor = 7;
+
 
 
 window.onload = windowReady;
@@ -40,30 +42,11 @@ ws.onopen = function () {
 };
 
 ws.onmessage = function (evt) {
-   // if (evt.data.constructor.name == "ArrayBuffer") {
-        var data = evt.data;
-        var view = new DataView(data);
-        var dataLength = view.byteLength;
-        var actionArrays = [];
-        var total = 0;
-        var lastSliced = 0;
-        while (total * 4 < dataLength) {
-            actionArrays[total] = view.getInt32(total*4);
-           // console.log(actionArrays[total - 1]);
-            if (actionArrays[actionArrays.length - 1] == -1) {
-                if (total > lastSliced) {
-
-                    handleSwitcher(actionArrays.slice(lastSliced, total));
-                    lastSliced = total + 1;
-                }
-            }
-            total++;
-        }
-    //    actionArrays.forEach(function(element) {
-    //    console.log(element);
-   // });
-        draw();
-  //  }
+    // if (evt.data.constructor.name == "ArrayBuffer") {
+    clearOldPositions();
+    handleIncommingData(evt);
+    draw();
+    //  }
 };
 
 ws.onclose = function () {
@@ -108,22 +91,76 @@ function sendAction(actionNumber) {
     ws.send(action);
 }
 
+function clearOldPositions() {
+    plays.forEach(function (pixel) {
+        pixel.x = [];
+        pixel.y = [];
+        pixel.width = [];
+        pixel.height = [];
+        pixel.rotation = [];
+        pixel.shape = [];
+    });
+    bonuses.forEach(function (pixel) {
+        pixel.x = [];
+        pixel.y = [];
+        pixel.width = [];
+        pixel.height = [];
+        pixel.rotation = [];
+        pixel.shape = [];
+
+    });
+    bullets.forEach(function (pixel) {
+        pixel.x = [];
+        pixel.y = [];
+        pixel.width = [];
+        pixel.height = [];
+        pixel.rotation = [];
+        pixel.shape = [];
+    });
+}
+function handleIncommingData(evt) {
+    var data = evt.data;
+    var view = new DataView(data);
+    var dataLength = view.byteLength;
+    var actionArrays = [];
+    var total = 0;
+    var lastSliced = 0;
+    while (total * 4 < dataLength) {
+        actionArrays[total] = view.getInt32(total * 4);
+        // console.log(actionArrays[total - 1]);
+        if (actionArrays[actionArrays.length - 1] == -1) {
+            if (total > lastSliced) {
+
+                handleSwitcher(actionArrays.slice(lastSliced, total));
+                lastSliced = total + 1;
+            }
+        }
+        total++;
+    }
+}
+
 function pixel(I) {
     I.color = I.col;
     I.x = [];
     I.y = [];
-    I.offsetX = [];
-    I.offsetY = [];
-    I.width = smallestSquareSize;
-    I.height = smallestSquareSize;
+    I.width = [];
+    I.height = [];
+    I.rotation = [];
+    I.shape = [];
+
     I.draw = function () {
         context.fillStyle = this.color;
         var n = 0;
 
         while (n < this.x.length) {
             //context.fillRect(this.x[n] * smallestSquareSize + this.offsetX[n] / smallestSquareSize, this.y[n] * smallestSquareSize + this.offsetY[n] / smallestSquareSize, this.width, this.height);
-            context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
+            // context.fillRect(this.x[n], this.y[n], this.width[n], this.height[n]);
+            drawRotatedRect(this.x[n], this.y[n], this.width[n], this.height[n], this.rotation[n] * 30);
+            // drawRotatedRect(x,y,width,height,degrees)
+            //    console.log("n = " + n);
+            //   console.log("this.x[n] = " + this.x[n]);
             n++;
+
         }
     };
     return I;
@@ -145,15 +182,17 @@ var gameBorders = {
             context.fillRect(this.x[n] * smallestSquareSize, this.y[n] * smallestSquareSize, this.width, this.height);
             n++;
 
+
         }
     }
 };
 
 function draw() {
+    // console.log("Called");
     context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    // player.draw();
     plays.forEach(function (pixel) {
         pixel.draw();
+        // console.log("Called again");
     });
     bonuses.forEach(function (pixel) {
         pixel.draw();
@@ -162,100 +201,114 @@ function draw() {
         pixel.draw();
     });
 
-   // gameBorders.draw();
+    // gameBorders.draw();
 
 }
 
 function handleSwitcher(arr) {
+    var actor = arr.shift();
 
-   // var happening = -1;
+    // var happening = -1;
     while (arr.length > 0) {
-        var actor = arr.shift();
+
         var actInstructions = getNextActInstructions(arr);
 
-    }
+        switch (actor) {
 
-    switch (actor) {
-
-        case 0:
-            handleGamePlan(actInstructions);
-            break;
-        case 1:
-            handlePositioning(actInstructions, plays);
-            break;
-        case 2:
-            handlePositioning(actInstructions, bonuses);
-            break;
-        case 3:
-            handlePositioning(actInstructions, bullets);
-            break;
+            case 0:
+                handleGamePlan(actInstructions);
+                break;
+            case 1:
+                handlePositioning(actInstructions, plays);
+                break;
+            case 2:
+                handlePositioning(actInstructions, bonuses);
+                break;
+            case 3:
+                handlePositioning(actInstructions, bullets);
+                break;
+        }
     }
+}
+function getNextActInstructions(arr) {
+    return arr.splice(0, 7);
 
 }
 function handlePositioning(moves, actor) {
-   // var totalNumberOFObjects = moves.shift();
-    var moved = 0;
-    actor.forEach(function (pixel) {
-        pixel.x = [];
-        pixel.y = [];
-    });
-
-   // while (moved < totalNumberOFObjects) {
-        var mover = moves.shift();
-        
-      //  var numberOfHappening = moves.shift();
-        
-      //  var n = 0;
-      //  while (n < numberOfHappening) {
 
 
-            actor[mover - 1].x[actor[mover - 1].x.length] = moves.shift();
-            actor[mover - 1].y[actor[mover - 1].y.length] = moves.shift();
-            var blah = moves.shift();
-            var blah = moves.shift();
-            var blah = moves.shift();
-            var blah = moves.shift();
-          //  n++;
-
-   //     }
-        moved++;
-  //  }
+    // printArr(moves);
 
 
+    var mover = moves.shift();
+
+    actor[mover - 1].x[actor[mover - 1].x.length] = moves.shift();
+    actor[mover - 1].y[actor[mover - 1].y.length] = moves.shift();
+    actor[mover - 1].width[actor[mover - 1].width.length] = moves.shift();
+    actor[mover - 1].height[actor[mover - 1].height.length] = moves.shift();
+    actor[mover - 1].rotation[actor[mover - 1].rotation.length] = moves.shift();
+    actor[mover - 1].shape[actor[mover - 1].shape.length] = moves.shift();
 }
 
 
 function handleGamePlan(arr) {
-/**
-    var totalNumberOFObjects = arr.shift();
-    //for now
-    var totalNumberOFObjects = 165 + 164;
-
-    while (arr.length > 0) {
-        console.log("Called");
-        var happening = arr.shift();
-
-        var numberOfHappening = arr.shift();
-        //For now
-        numberOfHappening = 165 + 164;
-        var n = 0;
-        //var n = arr.length;
-        // var n = 0;
-        switch (happening) {
-            case 1:
-                while (n < numberOfHappening) {
-                    gameBorders.x[gameBorders.x.length] = arr.shift();
-                    var apa = arr.shift();
-                    gameBorders.y[gameBorders.y.length] = arr.shift();
-                    var bpa = arr.shift();
-                    n++;
-                }
-        }
-
-    }
-    **/
+    /**
+     var totalNumberOFObjects = arr.shift();
+     //for now
+     var totalNumberOFObjects = 165 + 164;
+     
+     while (arr.length > 0) {
+     console.log("Called");
+     var happening = arr.shift();
+     
+     var numberOfHappening = arr.shift();
+     //For now
+     numberOfHappening = 165 + 164;
+     var n = 0;
+     //var n = arr.length;
+     // var n = 0;
+     switch (happening) {
+     case 1:
+     while (n < numberOfHappening) {
+     gameBorders.x[gameBorders.x.length] = arr.shift();
+     var apa = arr.shift();
+     gameBorders.y[gameBorders.y.length] = arr.shift();
+     var bpa = arr.shift();
+     n++;
+     }
+     }
+     
+     }
+     **/
 
 }
+
+
+function drawRotatedRect(x, y, width, height, degrees) {
+    console.log(degrees);
+
+    // first save the untranslated/unrotated context
+    context.save();
+
+    context.beginPath();
+    // move the rotation point to the center of the rect
+    context.translate(x + width / 2, y + height / 2);
+    // rotate the rect
+    context.rotate(degrees * Math.PI / 180);
+
+    // draw the rect on the transformed context
+    // Note: after transforming [0,0] is visually [x,y]
+    //       so the rect needs to be offset accordingly when drawn
+    context.fillStyle = "gold";
+    context.fillRect(-width / 2, -height / 2, width, height);
+
+    context.fill();
+
+    // restore the context to its untranslated/unrotated state
+    context.restore();
+
+}
+
 function createPlayers() {
     plays.push(pixel({col: "#00A"}));
     plays.push(pixel({col: "#AAA"}));
@@ -286,7 +339,8 @@ function createBullets() {
 
 
 function printArr(array) {
-          array.forEach(function(element) {
+    array.forEach(function (element) {
         console.log(element);
     });
+    console.log("done");
 }
