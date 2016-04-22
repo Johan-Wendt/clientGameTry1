@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9016/");
+var ws = new WebSocket("ws://127.0.0.1:9017/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -13,8 +13,8 @@ var playerNumber = 1;
 
 var smallestSquareSize = 14;
 
-var CANVAS_WIDTH = 1100;
-var CANVAS_HEIGHT = 600;
+var CANVAS_WIDTH = 1000;
+var CANVAS_HEIGHT = 500;
 //var padding = 20;
 //var borderThickness = 6;
 //var frameColor = "#000000";
@@ -155,12 +155,14 @@ function pixel(I) {
         while (n < this.x.length) {
             //context.fillRect(this.x[n] * smallestSquareSize + this.offsetX[n] / smallestSquareSize, this.y[n] * smallestSquareSize + this.offsetY[n] / smallestSquareSize, this.width, this.height);
             // context.fillRect(this.x[n], this.y[n], this.width[n], this.height[n]);
-            drawRotatedRect(this.x[n], this.y[n], this.width[n], this.height[n], this.rotation[n] * 30);
-            // drawRotatedRect(x,y,width,height,degrees)
-            //    console.log("n = " + n);
-            //   console.log("this.x[n] = " + this.x[n]);
-            n++;
-
+            if (this.x[n] >= 0) {
+                drawRotatedRect(this.x[n], this.y[n], this.width[n], this.height[n], this.rotation[n] * 30);
+                // drawRotatedRect(x,y,width,height,degrees)
+                //    console.log("n = " + n);
+                //   console.log("this.x[n] = " + this.x[n]);
+            }
+                n++;
+            
         }
     };
     return I;
@@ -292,15 +294,16 @@ function drawRotatedRect(x, y, width, height, degrees) {
 
     context.beginPath();
     // move the rotation point to the center of the rect
-    context.translate(x + width / 2, y + height / 2);
+    //context.translate(x + width / 2, y + height / 2);
+    context.translate(x, y);
     // rotate the rect
     context.rotate(degrees * Math.PI / 180);
 
     // draw the rect on the transformed context
     // Note: after transforming [0,0] is visually [x,y]
     //       so the rect needs to be offset accordingly when drawn
-    context.fillStyle = "gold";
-    context.fillRect(-width / 2, -height / 2, width, height);
+   // context.fillStyle = "gold";
+    context.fillRect(-width / 2 + 1, -height + 1/ 2, width + 2, height + 2);
 
     context.fill();
 
