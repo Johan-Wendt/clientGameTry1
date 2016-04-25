@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9017/");
+var ws = new WebSocket("ws://127.0.0.1:9018/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -303,7 +303,7 @@ function drawRotatedRect(x, y, width, height, degrees) {
     // Note: after transforming [0,0] is visually [x,y]
     //       so the rect needs to be offset accordingly when drawn
    // context.fillStyle = "gold";
-    context.fillRect(-width / 2 + 1, -height + 1/ 2, width + 2, height + 2);
+    context.fillRect(-width / 2, -height/ 2, width, height);
 
     context.fill();
 
