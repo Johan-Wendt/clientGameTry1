@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9018/");
+var ws = new WebSocket("ws://127.0.0.1:9020/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -26,6 +26,8 @@ var bullets = [];
 
 var instructionsSentPerActor = 7;
 
+var fps = 60;
+
 
 
 window.onload = windowReady;
@@ -35,6 +37,7 @@ function windowReady() {
     createPlayers();
     createBonuses();
     createBullets();
+    setInterval(draw, 1000 / fps);
 }
 
 ws.onopen = function () {
@@ -45,7 +48,7 @@ ws.onmessage = function (evt) {
     // if (evt.data.constructor.name == "ArrayBuffer") {
     clearOldPositions();
     handleIncommingData(evt);
-    draw();
+   // draw();
     //  }
 };
 
@@ -208,7 +211,9 @@ function draw() {
 }
 
 function handleSwitcher(arr) {
+    
     var actor = arr.shift();
+    
 
     // var happening = -1;
     while (arr.length > 0) {
@@ -224,6 +229,7 @@ function handleSwitcher(arr) {
                 handlePositioning(actInstructions, plays);
                 break;
             case 2:
+                console.log("bonus");
                 handlePositioning(actInstructions, bonuses);
                 break;
             case 3:
@@ -287,8 +293,6 @@ function handleGamePlan(arr) {
 
 
 function drawRotatedRect(x, y, width, height, degrees) {
-    console.log(degrees);
-
     // first save the untranslated/unrotated context
     context.save();
 
@@ -303,9 +307,9 @@ function drawRotatedRect(x, y, width, height, degrees) {
     // Note: after transforming [0,0] is visually [x,y]
     //       so the rect needs to be offset accordingly when drawn
    // context.fillStyle = "gold";
-    context.fillRect(-width / 2, -height/ 2, width, height);
+    context.fillRect(-width / 2.0, -height/ 2.0, width, height);
 
-    context.fill();
+   // context.fill();
 
     // restore the context to its untranslated/unrotated state
     context.restore();
