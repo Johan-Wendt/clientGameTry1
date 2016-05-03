@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9020/");
+var ws = new WebSocket("ws://127.0.0.1:9022/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -48,7 +48,7 @@ ws.onmessage = function (evt) {
     // if (evt.data.constructor.name == "ArrayBuffer") {
     clearOldPositions();
     handleIncommingData(evt);
-   // draw();
+    // draw();
     //  }
 };
 
@@ -164,8 +164,8 @@ function pixel(I) {
                 //    console.log("n = " + n);
                 //   console.log("this.x[n] = " + this.x[n]);
             }
-                n++;
-            
+            n++;
+
         }
     };
     return I;
@@ -211,51 +211,71 @@ function draw() {
 }
 
 function handleSwitcher(arr) {
-    
-    var actor = arr.shift();
-    
+    // printArr(arr);
+    // console.log("one rpund");
+
+    var type = arr.shift();
+
 
     // var happening = -1;
-    while (arr.length > 0) {
+    //while (arr.length > 0) {
 
-        var actInstructions = getNextActInstructions(arr);
+    //  var actInstructions = getNextActInstructions(arr);
 
-        switch (actor) {
+    switch (type) {
 
-            case 0:
-                handleGamePlan(actInstructions);
-                break;
-            case 1:
-                handlePositioning(actInstructions, plays);
-                break;
-            case 2:
-                console.log("bonus");
-                handlePositioning(actInstructions, bonuses);
-                break;
-            case 3:
-                handlePositioning(actInstructions, bullets);
-                break;
-        }
+        case 0:
+            handleGamePlan(arr);
+            break;
+        case 1:
+            handlePositioning(arr, plays);
+            break;
+        case 2:
+            handlePositioning(arr, bonuses);
+            break;
+        case 3:
+            handlePositioning(arr, bullets);
+            break;
+        case 4:
+            handleWeaponInfo(arr);
+            break;
     }
+    //}
 }
 function getNextActInstructions(arr) {
     return arr.splice(0, 7);
 
 }
-function handlePositioning(moves, actor) {
-
-
+function handlePositioning(moves, type) {
     // printArr(moves);
+    while (moves.length > 6) {
+
+        // printArr(moves);
 
 
-    var mover = moves.shift();
+        var subType = moves.shift();
 
-    actor[mover - 1].x[actor[mover - 1].x.length] = moves.shift();
-    actor[mover - 1].y[actor[mover - 1].y.length] = moves.shift();
-    actor[mover - 1].width[actor[mover - 1].width.length] = moves.shift();
-    actor[mover - 1].height[actor[mover - 1].height.length] = moves.shift();
-    actor[mover - 1].rotation[actor[mover - 1].rotation.length] = moves.shift();
-    actor[mover - 1].shape[actor[mover - 1].shape.length] = moves.shift();
+        type[subType - 1].x[type[subType - 1].x.length] = moves.shift();
+        type[subType - 1].y[type[subType - 1].y.length] = moves.shift();
+        type[subType - 1].width[type[subType - 1].width.length] = moves.shift();
+        type[subType - 1].height[type[subType - 1].height.length] = moves.shift();
+        type[subType - 1].rotation[type[subType - 1].rotation.length] = moves.shift();
+        type[subType - 1].shape[type[subType - 1].shape.length] = moves.shift();
+    }
+}
+
+function handleWeaponInfo(instructions) {
+    while (instructions.length > 2) {
+        var thePlayer = instructions.shift();
+        var theWeapon = instructions.shift();
+        var theAmmo = instructions.shift();
+
+        if (thePlayer == playerNumber) {
+            //setWeaponInfo(theWeapon, theAmmo);
+        }
+
+
+    }
 }
 
 
@@ -306,10 +326,10 @@ function drawRotatedRect(x, y, width, height, degrees) {
     // draw the rect on the transformed context
     // Note: after transforming [0,0] is visually [x,y]
     //       so the rect needs to be offset accordingly when drawn
-   // context.fillStyle = "gold";
-    context.fillRect(-width / 2.0, -height/ 2.0, width, height);
+    // context.fillStyle = "gold";
+    context.fillRect(-width / 2.0, -height / 2.0, width, height);
 
-   // context.fill();
+    // context.fill();
 
     // restore the context to its untranslated/unrotated state
     context.restore();
