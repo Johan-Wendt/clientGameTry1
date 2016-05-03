@@ -247,6 +247,7 @@ function getNextActInstructions(arr) {
 
 }
 function handlePositioning(moves, type) {
+    
     // printArr(moves);
     while (moves.length > 6) {
 
