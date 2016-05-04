@@ -139,6 +139,7 @@ function handleIncommingData(evt) {
             }
         }
         total++;
+        console.log("total =" + total);
     }
 }
 
@@ -212,7 +213,7 @@ function draw() {
 
 function handleSwitcher(arr) {
     // printArr(arr);
-    // console.log("one rpund");
+    console.log("one round");
 
     var type = arr.shift();
 
@@ -237,7 +238,7 @@ function handleSwitcher(arr) {
             handlePositioning(arr, bullets);
             break;
         case 4:
-            handleWeaponInfo(arr);
+            //   handleWeaponInfo(arr);
             break;
     }
     //}
@@ -247,25 +248,27 @@ function getNextActInstructions(arr) {
 
 }
 function handlePositioning(moves, type) {
-    
+
     // printArr(moves);
-    while (moves.length > 6) {
+    var k = 0;
+        while (moves.length > 6) {
 
-        // printArr(moves);
+            // printArr(moves);
+            var subType = moves.shift();
 
-
-        var subType = moves.shift();
-
-        type[subType - 1].x[type[subType - 1].x.length] = moves.shift();
-        type[subType - 1].y[type[subType - 1].y.length] = moves.shift();
-        type[subType - 1].width[type[subType - 1].width.length] = moves.shift();
-        type[subType - 1].height[type[subType - 1].height.length] = moves.shift();
-        type[subType - 1].rotation[type[subType - 1].rotation.length] = moves.shift();
-        type[subType - 1].shape[type[subType - 1].shape.length] = moves.shift();
-    }
+            type[subType - 1].x[type[subType - 1].x.length] = moves.shift();
+            type[subType - 1].y[type[subType - 1].y.length] = moves.shift();
+            type[subType - 1].width[type[subType - 1].width.length] = moves.shift();
+            type[subType - 1].height[type[subType - 1].height.length] = moves.shift();
+            type[subType - 1].rotation[type[subType - 1].rotation.length] = moves.shift();
+            type[subType - 1].shape[type[subType - 1].shape.length] = moves.shift();
+            console.log("k =" + k);
+        }
 }
 
 function handleWeaponInfo(instructions) {
+    // printArr(instructions);
+    var f = 0;
     while (instructions.length > 2) {
         var thePlayer = instructions.shift();
         var theWeapon = instructions.shift();
@@ -274,6 +277,7 @@ function handleWeaponInfo(instructions) {
         if (thePlayer == playerNumber) {
             //setWeaponInfo(theWeapon, theAmmo);
         }
+        console.log("f =" + f);
 
 
     }
@@ -281,34 +285,6 @@ function handleWeaponInfo(instructions) {
 
 
 function handleGamePlan(arr) {
-    /**
-     var totalNumberOFObjects = arr.shift();
-     //for now
-     var totalNumberOFObjects = 165 + 164;
-     
-     while (arr.length > 0) {
-     console.log("Called");
-     var happening = arr.shift();
-     
-     var numberOfHappening = arr.shift();
-     //For now
-     numberOfHappening = 165 + 164;
-     var n = 0;
-     //var n = arr.length;
-     // var n = 0;
-     switch (happening) {
-     case 1:
-     while (n < numberOfHappening) {
-     gameBorders.x[gameBorders.x.length] = arr.shift();
-     var apa = arr.shift();
-     gameBorders.y[gameBorders.y.length] = arr.shift();
-     var bpa = arr.shift();
-     n++;
-     }
-     }
-     
-     }
-     **/
 
 }
 
@@ -370,5 +346,5 @@ function printArr(array) {
     array.forEach(function (element) {
         console.log(element);
     });
-    console.log("done");
+    console.log("done printing array");
 }
