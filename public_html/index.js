@@ -18,7 +18,7 @@ var CANVAS_HEIGHT = 500;
 //var padding = 20;
 //var borderThickness = 6;
 //var frameColor = "#000000";
-var context = document.getElementById('canvasId').getContext("2d");
+var context;
 
 var bonuses = [];
 var plays = [];
@@ -33,6 +33,7 @@ var fps = 60;
 window.onload = windowReady;
 
 function windowReady() {
+    context = document.getElementById('canvasId').getContext("2d");
     window.addEventListener("keydown", this.check, false);
     createPlayers();
     createBonuses();
@@ -46,7 +47,7 @@ ws.onopen = function () {
 
 ws.onmessage = function (evt) {
     // if (evt.data.constructor.name == "ArrayBuffer") {
-    clearOldPositions();
+    // clearOldPositions();
     handleIncommingData(evt);
     // draw();
     //  }
@@ -93,26 +94,8 @@ function sendAction(actionNumber) {
     var action = playerNumber + "" + actionNumber;
     ws.send(action);
 }
-
-function clearOldPositions() {
-    plays.forEach(function (pixel) {
-        pixel.x = [];
-        pixel.y = [];
-        pixel.width = [];
-        pixel.height = [];
-        pixel.rotation = [];
-        pixel.shape = [];
-    });
-    bonuses.forEach(function (pixel) {
-        pixel.x = [];
-        pixel.y = [];
-        pixel.width = [];
-        pixel.height = [];
-        pixel.rotation = [];
-        pixel.shape = [];
-
-    });
-    bullets.forEach(function (pixel) {
+function clearOldPositions(actor) {
+    actor.forEach(function (pixel) {
         pixel.x = [];
         pixel.y = [];
         pixel.width = [];
@@ -121,6 +104,35 @@ function clearOldPositions() {
         pixel.shape = [];
     });
 }
+/**
+ function clearOldPositions() {
+ plays.forEach(function (pixel) {
+ pixel.x = [];
+ pixel.y = [];
+ pixel.width = [];
+ pixel.height = [];
+ pixel.rotation = [];
+ pixel.shape = [];
+ });
+ bonuses.forEach(function (pixel) {
+ pixel.x = [];
+ pixel.y = [];
+ pixel.width = [];
+ pixel.height = [];
+ pixel.rotation = [];
+ pixel.shape = [];
+ 
+ });
+ bullets.forEach(function (pixel) {
+ pixel.x = [];
+ pixel.y = [];
+ pixel.width = [];
+ pixel.height = [];
+ pixel.rotation = [];
+ pixel.shape = [];
+ });
+ }
+ **/
 function handleIncommingData(evt) {
     var data = evt.data;
     var view = new DataView(data);
@@ -139,7 +151,6 @@ function handleIncommingData(evt) {
             }
         }
         total++;
-        console.log("total =" + total);
     }
 }
 
@@ -212,8 +223,9 @@ function draw() {
 }
 
 function handleSwitcher(arr) {
-    // printArr(arr);
-    console.log("one round");
+    //   printArr(arr);
+    // console.log("one round");
+    
 
     var type = arr.shift();
 
@@ -225,20 +237,24 @@ function handleSwitcher(arr) {
 
     switch (type) {
 
+
         case 0:
             handleGamePlan(arr);
             break;
         case 1:
+            clearOldPositions(plays);
             handlePositioning(arr, plays);
             break;
         case 2:
+            clearOldPositions(bonuses);
             handlePositioning(arr, bonuses);
             break;
         case 3:
+            clearOldPositions(bullets);
             handlePositioning(arr, bullets);
             break;
         case 4:
-            //   handleWeaponInfo(arr);
+            handleWeaponInfo(arr);
             break;
     }
     //}
@@ -250,34 +266,34 @@ function getNextActInstructions(arr) {
 function handlePositioning(moves, type) {
 
     // printArr(moves);
-    var k = 0;
-        while (moves.length > 6) {
+    while (moves.length > 6) {
 
-            // printArr(moves);
-            var subType = moves.shift();
+        // printArr(moves);
+        var subType = moves.shift();
 
-            type[subType - 1].x[type[subType - 1].x.length] = moves.shift();
-            type[subType - 1].y[type[subType - 1].y.length] = moves.shift();
-            type[subType - 1].width[type[subType - 1].width.length] = moves.shift();
-            type[subType - 1].height[type[subType - 1].height.length] = moves.shift();
-            type[subType - 1].rotation[type[subType - 1].rotation.length] = moves.shift();
-            type[subType - 1].shape[type[subType - 1].shape.length] = moves.shift();
-            console.log("k =" + k);
-        }
+        type[subType - 1].x[type[subType - 1].x.length] = moves.shift();
+        type[subType - 1].y[type[subType - 1].y.length] = moves.shift();
+        type[subType - 1].width[type[subType - 1].width.length] = moves.shift();
+        type[subType - 1].height[type[subType - 1].height.length] = moves.shift();
+        type[subType - 1].rotation[type[subType - 1].rotation.length] = moves.shift();
+        type[subType - 1].shape[type[subType - 1].shape.length] = moves.shift();
+    }
 }
 
 function handleWeaponInfo(instructions) {
     // printArr(instructions);
-    var f = 0;
     while (instructions.length > 2) {
         var thePlayer = instructions.shift();
         var theWeapon = instructions.shift();
         var theAmmo = instructions.shift();
 
         if (thePlayer == playerNumber) {
+            var weapon = getWeaponName(theWeapon);
             //setWeaponInfo(theWeapon, theAmmo);
+            var theDiv = document.getElementById("weaponInfo");
+            // var content = document.createTextNode("WEAPON\n" + theAmmo);
+            theDiv.innerHTML = weapon + "<br>" + theAmmo;
         }
-        console.log("f =" + f);
 
 
     }
@@ -338,7 +354,18 @@ function createBullets() {
     bullets.push(pixel({col: "#3F9"}));
 
 }
-
+function getWeaponName(weaponInt) {
+    switch (weaponInt) {
+        case 1:
+            return "Knife";
+        case 2:
+            return "Mine";
+        case 3:
+            return "Pistol";
+        case 4:
+            return "Shotgun";
+    }
+}
 
 
 
