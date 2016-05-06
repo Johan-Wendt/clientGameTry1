@@ -9,7 +9,7 @@ var spaceCode = 32;
 var shootCode = 67;
 var pauseCode = 80;
 
-var playerNumber = 1;
+var playerNumber;
 
 var smallestSquareSize = 14;
 
@@ -104,35 +104,7 @@ function clearOldPositions(actor) {
         pixel.shape = [];
     });
 }
-/**
- function clearOldPositions() {
- plays.forEach(function (pixel) {
- pixel.x = [];
- pixel.y = [];
- pixel.width = [];
- pixel.height = [];
- pixel.rotation = [];
- pixel.shape = [];
- });
- bonuses.forEach(function (pixel) {
- pixel.x = [];
- pixel.y = [];
- pixel.width = [];
- pixel.height = [];
- pixel.rotation = [];
- pixel.shape = [];
- 
- });
- bullets.forEach(function (pixel) {
- pixel.x = [];
- pixel.y = [];
- pixel.width = [];
- pixel.height = [];
- pixel.rotation = [];
- pixel.shape = [];
- });
- }
- **/
+
 function handleIncommingData(evt) {
     var data = evt.data;
     var view = new DataView(data);
@@ -225,7 +197,7 @@ function draw() {
 function handleSwitcher(arr) {
     //   printArr(arr);
     // console.log("one round");
-    
+
 
     var type = arr.shift();
 
@@ -239,7 +211,12 @@ function handleSwitcher(arr) {
 
 
         case 0:
-            handleGamePlan(arr);
+            if (!playerNumber) {
+                console.log("Player number before = " + playerNumber);
+                playerNumber = arr.shift();
+                console.log("Player number after = " + playerNumber);
+                console.log("done");
+            }
             break;
         case 1:
             clearOldPositions(plays);
