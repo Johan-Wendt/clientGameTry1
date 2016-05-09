@@ -8,6 +8,12 @@ and open the template in the editor.
     Author     : johanwendt
 */
 
+body {
+    background-image: url("Pictures/dry.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
 #weaponInfo {
  // position: absolute;
  // top: 20%;
