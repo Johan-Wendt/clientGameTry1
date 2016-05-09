@@ -9,12 +9,19 @@ and open the template in the editor.
 */
 
 body {
-    background-image: url("Pictures/dry.jpg");
+  //  background-image: url("Pictures/dry.jpg");
     background-repeat: no-repeat;
     background-size:cover;
 }
 
 #weaponInfo {
+ // position: absolute;
+ // top: 20%;
+  //transform: translateY(-500%);
+  //transform: translateX(450%);
+   transform: translate(700px,-400px);
+}
+#playerInfo {
  // position: absolute;
  // top: 20%;
   //transform: translateY(-500%);

@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9022/");
+var ws = new WebSocket("ws://127.0.0.1:9024/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -140,9 +140,6 @@ function check(e) {
             break;
         case createCode:
             sendAction(81);
-            break;
-        case messageCode:
-            sendAction(71 + "Suck on this");
             break;
     }
 }
@@ -338,6 +335,14 @@ function handleGameMetaInfo(instructions) {
         case "p":
             //  playerNumber = arr.shift();
             console.log(instructions);
+            //setWeaponInfo(theWeapon, theAmmo);
+         //   var playerDiv = document.getElementById("playerInfo");
+          //  playerDiv.innerHTML = "dd";
+            // var content = document.createTextNode("WEAPON\n" + theAmmo);
+            //if(playerDiv) {
+            var playerDiv = document.getElementById("playerInfo");
+            playerDiv.innerHTML = "<br>" + instructions.substring(1,instructions.length) + "<br>";
+    //    }
             break;
     }
 }
