@@ -20,10 +20,6 @@ body {
     background-size:cover;
 }
 #weaponInfo {
- // position: absolute;
- // top: 20%;
-  //transform: translateY(-500%);
-  //transform: translateX(450%);
    transform: translate(820px,-600px);
 }
 #playerInfo {
@@ -37,4 +33,8 @@ body {
 body, html { 
     overflow-x: hidden; 
     overflow-y: hidden;
+}
+
+#newGame {
+   transform: translate(820px,-100px);
 }

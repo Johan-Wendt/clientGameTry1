@@ -48,6 +48,9 @@ var playerName;
 
 
 
+
+
+
 window.onload = windowReady;
 
 function windowReady() {
@@ -327,24 +330,42 @@ function handleWeaponInfo(instructions) {
 function handleGameMetaInfo(instructions) {
 
 
-    var type = instructions.substring(0,1);
-    console.log(type);
+    var type = instructions.substring(0, 1);
+    var cleanInstructions = instructions.substring(1, instructions.length);
     switch (type) {
 
 
         case "p":
-            //  playerNumber = arr.shift();
-            console.log(instructions);
-            //setWeaponInfo(theWeapon, theAmmo);
-         //   var playerDiv = document.getElementById("playerInfo");
-          //  playerDiv.innerHTML = "dd";
-            // var content = document.createTextNode("WEAPON\n" + theAmmo);
-            //if(playerDiv) {
             var playerDiv = document.getElementById("playerInfo");
-            playerDiv.innerHTML = "<br>" + instructions.substring(1,instructions.length) + "<br>";
-    //    }
+            playerDiv.innerHTML = "<br>" + cleanInstructions + "<br>";
+            break;
+
+        case "r":
+            console.log(cleanInstructions);
+            var gameRooms = document.getElementById("gameRoomInfo");
+            
+        //    var gameRooms = document.getElementById("gameRoomInfo");
+            gameRooms.innerHTML = "";   
+            
+            var rooms = cleanInstructions.split(",");
+            var n = 0; 
+            while(n < rooms.length) {
+                var room = rooms[n];
+                var para = document.createElement("P");                       // Create a <p> node
+                para.id = room;
+                para.onclick = setGameRoomselector(para.id);
+            var t = document.createTextNode(room);      // Create a text node
+            para.appendChild(t);                                          // Append the text to <p>
+            gameRooms.appendChild(para);
+                n ++;
+            }
             break;
     }
+}
+function setGameRoomselector(id) {
+    console.log("called");
+    gameRoomselector = id;
+    console.log(gameRoomselector);
 }
 
 function createPlayers() {
