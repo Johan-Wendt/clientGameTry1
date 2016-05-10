@@ -14,19 +14,24 @@ body {
     background-size:cover;
 }
 
+#canvasId{
+    background-image: url("Pictures/dry.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+}
 #weaponInfo {
  // position: absolute;
  // top: 20%;
   //transform: translateY(-500%);
   //transform: translateX(450%);
-   transform: translate(700px,-400px);
+   transform: translate(820px,-600px);
 }
 #playerInfo {
  // position: absolute;
  // top: 20%;
   //transform: translateY(-500%);
   //transform: translateX(450%);
-   transform: translate(700px,-400px);
+   transform: translate(820px,-600px);
 }
 
 body, html { 

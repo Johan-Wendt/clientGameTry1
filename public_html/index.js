@@ -21,8 +21,8 @@ var messageCode = 87;
 var playerNumber = 1;
 
 
-var CANVAS_WIDTH = 1000;
-var CANVAS_HEIGHT = 500;
+var CANVAS_WIDTH = 800;
+var CANVAS_HEIGHT = 600;
 //var padding = 20;
 //var borderThickness = 6;
 //var frameColor = "#000000";
@@ -398,8 +398,10 @@ function printArr(array) {
 function enterName() {
     var playerName = prompt("Please enter your name", "New Player");
     sendAction(71 + playerName);
-
-
+}
+function gamePopup() {
+    var gameName = prompt("Name of the game", "New Game");
+    sendAction(72 + gameName);
 }
 
 function sleep(milliseconds) {
