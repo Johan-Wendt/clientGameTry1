@@ -45,6 +45,8 @@ var growBonus;
 var bullet;
 
 var playerName;
+var gameRoomselector;
+var gameRooms = [];
 
 
 
@@ -88,7 +90,7 @@ ws.onerror = function (err) {
 window.onbeforeunload = function () {
     sendAction(92);
     sleep(1000);
-}
+};
 
 function loadImages() {
     bullet = new Image(20, 9);
@@ -343,28 +345,40 @@ function handleGameMetaInfo(instructions) {
         case "r":
             console.log(cleanInstructions);
             var gameRooms = document.getElementById("gameRoomInfo");
-            
-        //    var gameRooms = document.getElementById("gameRoomInfo");
-            gameRooms.innerHTML = "";   
-            
+
+            //    var gameRooms = document.getElementById("gameRoomInfo");
+            gameRooms.innerHTML = "";
+
             var rooms = cleanInstructions.split(",");
-            var n = 0; 
-            while(n < rooms.length) {
+            var n = 0;
+            while (n < rooms.length) {
                 var room = rooms[n];
                 var para = document.createElement("P");                       // Create a <p> node
                 para.id = room;
-                para.onclick = setGameRoomselector(para.id);
-            var t = document.createTextNode(room);      // Create a text node
-            para.appendChild(t);                                          // Append the text to <p>
-            gameRooms.appendChild(para);
-                n ++;
+                gameRooms[gameRooms.length] = para;
+                console.log(gameRooms[gameRooms.length - 1]);
+                para.onclick = function () {
+                    setGameRoomselector(gameRooms[gameRooms.length - 1])
+                };
+                var t = document.createTextNode(room);      // Create a text node
+                para.appendChild(t);                                          // Append the text to <p>
+                gameRooms.appendChild(para);
+                
+                n++;
             }
+            
             break;
     }
 }
 function setGameRoomselector(id) {
-    console.log("called");
+    console.log(id);
+    if (gameRoomselector) {
+        var oldHighlight = document.getElementById(gameRoomselector);
+        oldHighlight.style.color = 'black';
+    }
     gameRoomselector = id;
+    var newHighlight = document.getElementById(gameRoomselector);
+    newHighlight.style.color = 'red';
     console.log(gameRoomselector);
 }
 
