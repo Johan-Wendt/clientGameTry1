@@ -46,7 +46,7 @@ var bullet;
 
 var playerName;
 var gameRoomselector;
-var gameRooms = [];
+var allGameRooms = [];
 
 
 
@@ -152,6 +152,7 @@ function check(e) {
 function sendAction(actionNumber) {
 
     var action = playerNumber + "" + actionNumber;
+    console.log("action sent =" + action);
     ws.send(action);
 }
 function clearOldPositions(actor) {
@@ -330,6 +331,7 @@ function handleWeaponInfo(instructions) {
     }
 }
 function handleGameMetaInfo(instructions) {
+    console.log(instructions);
 
 
     var type = instructions.substring(0, 1);
@@ -353,37 +355,35 @@ function handleGameMetaInfo(instructions) {
             var n = 0;
             while (n < rooms.length) {
                 var room = rooms[n];
-                var para = document.createElement("P");                       // Create a <p> node
-                para.id = room;
-                gameRooms[gameRooms.length] = para;
-                console.log(gameRooms[gameRooms.length - 1]);
-                para.onclick = function () {
-                    setGameRoomselector(gameRooms[gameRooms.length - 1])
-                };
-                var t = document.createTextNode(room);      // Create a text node
-                para.appendChild(t);                                          // Append the text to <p>
-                gameRooms.appendChild(para);
-                
+                if (room.length > 0) {
+                    var para = document.createElement("P");
+                    para.id = room;
+                    allGameRooms.push(para);
+                    para.onclick = function () {
+                        setGameRoomselector(this);
+                    };
+                    var t = document.createTextNode(room);      // Create a text node
+                    para.appendChild(t);                                          // Append the text to <p>
+                    gameRooms.appendChild(para);
+                }
+
                 n++;
             }
-            
+
             break;
     }
 }
-function setGameRoomselector(id) {
-    console.log(id);
+function setGameRoomselector(gameRoom) {
     if (gameRoomselector) {
-        var oldHighlight = document.getElementById(gameRoomselector);
+        var oldHighlight = document.getElementById(gameRoomselector.id);
         oldHighlight.style.color = 'black';
     }
-    gameRoomselector = id;
-    var newHighlight = document.getElementById(gameRoomselector);
+    gameRoomselector = gameRoom;
+    var newHighlight = document.getElementById(gameRoom.id);
     newHighlight.style.color = 'red';
-    console.log(gameRoomselector);
 }
 
 function createPlayers() {
-    pistolBonus
     plays.push(pixel({image: player1}));
     plays.push(pixel({image: player2}));
     plays.push(pixel({image: player1}));
