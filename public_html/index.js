@@ -53,7 +53,9 @@ var gameRoomBackground;
 
 var gameRunning = false;
 
-var roomContent = document.getElementById("joinedGameRoomInfo");
+var roomContent;
+var gameRooms;
+
 
 
 
@@ -68,6 +70,8 @@ window.onload = windowReady;
 function windowReady() {
     context = document.getElementById('canvasId').getContext("2d");
     window.addEventListener("keydown", this.check, false);
+    roomContent = document.getElementById("joinedGameRoomInfo");
+    gameRooms = document.getElementById("gameRoomInfoText");
     loadImages();
     createPlayers();
     createBonuses();
@@ -362,7 +366,6 @@ function handleGameMetaInfo(instructions) {
 
         case "r":
             console.log(cleanInstructions);
-            var gameRooms = document.getElementById("gameRoomInfo");
 
             //    var gameRooms = document.getElementById("gameRoomInfo");
             gameRooms.innerHTML = "";
@@ -390,6 +393,7 @@ function handleGameMetaInfo(instructions) {
 
         case "m":
             console.log(cleanInstructions);
+            console.log("roomContent = " + roomContent);
             roomContent.innerHTML = "";
 
             var members = cleanInstructions.split(",");
