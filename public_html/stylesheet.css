@@ -18,7 +18,11 @@ body {
     background-image: url("Pictures/dry.jpg");
     background-repeat: no-repeat;
     background-size:cover;
+    border: 2px solid #55F;
+   // z-index: 0;
 }
+
+
 #weaponInfo {
    transform: translate(820px,-600px);
 }
@@ -36,5 +40,14 @@ body, html {
 }
 
 #newGame {
-   transform: translate(820px,-100px);
+  // transform: translate(220px,-100px);
+}
+#joinRoom {
+  // transform: translate(120px,-200px);
+}
+
+
+#gameRoomBackground {
+    position: absolute;
+    transform: translate(200px,500px);
 }

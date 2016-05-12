@@ -27,6 +27,7 @@ var CANVAS_HEIGHT = 600;
 //var borderThickness = 6;
 //var frameColor = "#000000";
 var context;
+//var contextSecondary;
 
 var bonuses = [];
 var plays = [];
@@ -46,7 +47,16 @@ var bullet;
 
 var playerName;
 var gameRoomselector;
-var allGameRooms = [];
+var joinedGameRoom;
+var gameRoomBackground;
+//var allGameRooms = [];
+
+var gameRunning = false;
+
+var roomContent = document.getElementById("joinedGameRoomInfo");
+
+
+
 
 
 
@@ -107,6 +117,10 @@ function loadImages() {
     player1.src = 'Pictures/Player1.png';
     player2 = new Image(18, 23);
     player2.src = 'Pictures/Player2.png';
+    gameRoomBackground = new Image(200, 400);
+    gameRoomBackground.id = "gameRoomBackground";
+    gameRoomBackground.src = 'Pictures/Coffee.png';
+
 }
 
 function check(e) {
@@ -247,16 +261,18 @@ function drawRotatedRect(image, x, y, width, height, degrees) {
 
 
 function draw() {
-    context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    plays.forEach(function (pixel) {
-        pixel.draw();
-    });
-    bonuses.forEach(function (pixel) {
-        pixel.draw();
-    });
-    bullets.forEach(function (pixel) {
-        pixel.draw();
-    });
+    if (gameRunning) {
+        context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        plays.forEach(function (pixel) {
+            pixel.draw();
+        });
+        bonuses.forEach(function (pixel) {
+            pixel.draw();
+        });
+        bullets.forEach(function (pixel) {
+            pixel.draw();
+        });
+    }
 
 }
 
@@ -358,13 +374,34 @@ function handleGameMetaInfo(instructions) {
                 if (room.length > 0) {
                     var para = document.createElement("P");
                     para.id = room;
-                    allGameRooms.push(para);
+                    //   allGameRooms.push(para);
                     para.onclick = function () {
                         setGameRoomselector(this);
                     };
                     var t = document.createTextNode(room);      // Create a text node
                     para.appendChild(t);                                          // Append the text to <p>
                     gameRooms.appendChild(para);
+                }
+
+                n++;
+            }
+
+            break;
+
+        case "m":
+            console.log(cleanInstructions);
+            roomContent.innerHTML = "";
+
+            var members = cleanInstructions.split(",");
+            var n = 0;
+            while (n < members.length) {
+                var member = members[n];
+                if (member.length > 0) {
+                    var para = document.createElement("P");
+
+                    var t = document.createTextNode(joinedGameRoom.id);      // Create a text node
+                    para.appendChild(t);                                          // Append the text to <p>
+                    roomContent.appendChild(para);
                 }
 
                 n++;
@@ -437,6 +474,21 @@ function enterName() {
 function gamePopup() {
     var gameName = prompt("Name of the game", "New Game");
     sendAction(72 + gameName);
+}
+function joinGameRoom() {
+    var gameRoomLocationx = 100;
+    var gameRoomLocationy = 100;
+    joinedGameRoom = gameRoomselector;
+
+    sendAction(73 + joinedGameRoom.id);
+    // contextSecondary.style.zIndex = "1";
+    // context.drawImage(gameRoomBackground, gameRoomLocationx, gameRoomLocationy, gameRoomBackground.width, gameRoomBackground.height);
+    //  contextSecondary.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+
+
+
+
 }
 
 function sleep(milliseconds) {
