@@ -39,12 +39,6 @@ body, html {
     overflow-y: hidden;
 }
 
-#newGame {
-    // transform: translate(220px,-100px);
-}
-#joinRoom {
-    // transform: translate(120px,-200px);
-}
 
 
 #gameRoomBackground {
@@ -80,7 +74,7 @@ body, html {
     border: 3px solid #73AD21;
     background-color: lightblue;
 }
-
+/**
 #newGame {
     position: absolute;
     right:    0;
@@ -93,9 +87,17 @@ body, html {
     bottom:   0;
     z-index: 100;
 }
+**/
 #startGame{
     position: absolute;
     right:    0;
     bottom:   0;
     z-index: 100;
+}
+
+#newGameContainer {
+    position: absolute;
+    left:    0;
+    bottom:   0;
+    
 }

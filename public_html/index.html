@@ -17,8 +17,26 @@
         <div id="gameRoomInfo"><p><p>
             <div class="texts" id="gameRoomInfoText"><h1>Game Rooms</h1></div>
             <div id="buttonContainer">
-                <button id="newGame" onclick="gamePopup()">New Game</button>
                 <button id="joinRoom" onclick="joinGameRoom()">Join Room</button>
+            </div>
+
+            <div id="newGameContainer">
+                
+                <select id="humanNrOfPlayers">
+                    <option selected disabled>Number of human players</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <select id="computerNrOfPlayers">
+                    <option selected disabled>Number of computer players</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <button id="newGame" onclick="gamePopup()">New Game</button>
             </div>
         </div>
 
