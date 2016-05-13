@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    
+
     <head>
         <title>Killer Snakes</title>
         <meta charset="UTF-8">
@@ -9,20 +9,29 @@
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
     </head>
     <body>
-        
+
         <canvas id="canvasId" width="800" height="600"></canvas>
-     
-        
-        <div id="playerInfo"><p><p></div>
+
+
+        <div class="texts" id="playerInfo"><h1>Players</h1></div>
         <div id="gameRoomInfo"><p><p>
-        <button id="newGame" onclick="gamePopup()">New Game</button>
-        <button id="joinRoom" onclick="joinGameRoom()">Join Room</button>
-        <div id="gameRoomInfoText"><p><p></div>
+            <div class="texts" id="gameRoomInfoText"><h1>Game Rooms</h1></div>
+            <div id="buttonContainer">
+                <button id="newGame" onclick="gamePopup()">New Game</button>
+                <button id="joinRoom" onclick="joinGameRoom()">Join Room</button>
+            </div>
         </div>
-        <div id="joinedGameRoomInfo"><h1>Current Game Room</h1></div>
+
+        <div id="joinedGameRoomInfo"><p><p>
+            <div class="texts" id="joinedGameRoomText"><h1>Current Game Room</h1></div>
+            <div id="buttonContainer2">
+                <button id="startGame" onclick="gameStart()">Start Game</button>
+            </div>
+        </div>
+
         <div id="weaponInfo"><p><p></div>
-        
-        
-                
+
+
+
     </body>
 </html>

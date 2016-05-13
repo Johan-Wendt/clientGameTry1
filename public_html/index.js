@@ -70,7 +70,7 @@ window.onload = windowReady;
 function windowReady() {
     context = document.getElementById('canvasId').getContext("2d");
     window.addEventListener("keydown", this.check, false);
-    roomContent = document.getElementById("joinedGameRoomInfo");
+    roomContent = document.getElementById("joinedGameRoomText");
     gameRooms = document.getElementById("gameRoomInfoText");
     loadImages();
     createPlayers();
@@ -361,7 +361,31 @@ function handleGameMetaInfo(instructions) {
 
         case "p":
             var playerDiv = document.getElementById("playerInfo");
-            playerDiv.innerHTML = "<br>" + cleanInstructions + "<br>";
+           // playerDiv.innerHTML = "<br>" + cleanInstructions + "<br>";
+           // break;
+            
+             playerDiv.innerHTML = "";
+            var parag = document.createElement("H1");
+
+                    var te = document.createTextNode("Players");      // Create a text node
+                    parag.appendChild(te);                                          // Append the text to <p>
+                    playerDiv.appendChild(parag);
+
+            var players = cleanInstructions.split(",");
+            var n = 0;
+            while (n < players.length) {
+                var player = players[n];
+                if (player.length > 0) {
+                    var para = document.createElement("P");
+
+                    var t = document.createTextNode(player);      // Create a text node
+                    para.appendChild(t);                                          // Append the text to <p>
+                    playerDiv.appendChild(para);
+                }
+
+                n++;
+            }
+
             break;
 
         case "r":
@@ -369,6 +393,11 @@ function handleGameMetaInfo(instructions) {
 
             //    var gameRooms = document.getElementById("gameRoomInfo");
             gameRooms.innerHTML = "";
+            var parag = document.createElement("H1");
+
+                    var te = document.createTextNode("Game Rooms");      // Create a text node
+                    parag.appendChild(te);                                          // Append the text to <p>
+                    gameRooms.appendChild(parag);
 
             var rooms = cleanInstructions.split(",");
             var n = 0;
@@ -395,6 +424,11 @@ function handleGameMetaInfo(instructions) {
             console.log(cleanInstructions);
             console.log("roomContent = " + roomContent);
             roomContent.innerHTML = "";
+            var parag = document.createElement("H1");
+
+                    var te = document.createTextNode("Current Game Room");      // Create a text node
+                    parag.appendChild(te);                                          // Append the text to <p>
+                    roomContent.appendChild(parag);
 
             var members = cleanInstructions.split(",");
             var n = 0;
@@ -403,7 +437,7 @@ function handleGameMetaInfo(instructions) {
                 if (member.length > 0) {
                     var para = document.createElement("P");
 
-                    var t = document.createTextNode(joinedGameRoom.id);      // Create a text node
+                    var t = document.createTextNode(member);      // Create a text node
                     para.appendChild(t);                                          // Append the text to <p>
                     roomContent.appendChild(para);
                 }
