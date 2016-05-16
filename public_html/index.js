@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9024/");
+var ws = new WebSocket("ws://127.0.0.1:9025/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -55,6 +55,7 @@ var gameRunning = false;
 
 var roomContent;
 var gameRooms;
+var gameBackgound;
 
 
 
@@ -72,11 +73,14 @@ function windowReady() {
     window.addEventListener("keydown", this.check, false);
     roomContent = document.getElementById("joinedGameRoomText");
     gameRooms = document.getElementById("gameRoomInfoText");
+
     loadImages();
     createPlayers();
     createBonuses();
     createBullets();
     setInterval(draw, 1000 / fps);
+    disableButtons();
+    setOnchanges();
 
     enterName();
 }
@@ -86,11 +90,7 @@ ws.onopen = function () {
 };
 
 ws.onmessage = function (evt) {
-    // if (evt.data.constructor.name == "ArrayBuffer") {
-    // clearOldPositions();
     handleIncommingData(evt);
-    // draw();
-    //  }
 };
 
 ws.onclose = function () {
@@ -159,7 +159,7 @@ function check(e) {
             break;
 
         case joinCode:
-            sendAction(91);
+            sendAction(55);
             break;
         case createCode:
             sendAction(81);
@@ -289,6 +289,10 @@ function handleSwitcher(arr) {
 
         case 0:
             playerNumber = arr.shift();
+            gameRunning = true;
+            setVisibilityMetaDivs('none');
+            document.getElementById("mygameRoom").innerHTML = "";
+            document.getElementById("canvasId").style.opacity = "1";
             break;
         case 1:
             clearOldPositions(plays);
@@ -305,9 +309,12 @@ function handleSwitcher(arr) {
         case 4:
             handleWeaponInfo(arr);
             break;
-        case 5:
-            handleGameMetaInfo(arr);
+
+        case 6:
+            console.log("Called");
+            mainMenu();
             break;
+
     }
     //}
 }
@@ -351,8 +358,6 @@ function handleWeaponInfo(instructions) {
     }
 }
 function handleGameMetaInfo(instructions) {
-    console.log(instructions);
-
 
     var type = instructions.substring(0, 1);
     var cleanInstructions = instructions.substring(1, instructions.length);
@@ -368,32 +373,48 @@ function handleGameMetaInfo(instructions) {
         case "r":
             var gameRooms = document.getElementById("gameRoomInfoText");
             createInfoDiv(gameRooms, "Game Rooms", cleanInstructions, function () {
-                        setGameRoomselector(this);
-                    });
+                setGameRoomselector(this);
+            });
             break;
 
         case "m":
-            createInfoDiv(roomContent, "Current Game Room", cleanInstructions);
+            createInfoDiv(roomContent, "Joined Room", cleanInstructions);
+            break;
+
+        case "n":
+            addText(document.getElementById("myName"), "H2", cleanInstructions);
+            break;
+        case "c":
+            if (cleanInstructions == 0) {
+                document.getElementById("startGame").disabled = true;
+            }
+            else {
+                var element = document.getElementById("mygameRoom");
+                element.innerHTML = cleanInstructions;
+            }
+            break;
+
+        case "e":
+            handleError(cleanInstructions);
             break;
     }
 }
 function createInfoDiv(div, heading, texts, onClick) {
-    
-            div.innerHTML = "";
-            addText(div, "H1", heading);
-            var infos = texts.split(",");
-            var n = 0;
-            while (n < infos.length) {
-                
-                var info = infos[n];
-                console.log(info);
-                if (info.length > 0) {
-                    addText(div, "P", info, onClick);
-                }
 
-                n++;
-            }
-    
+    div.innerHTML = "";
+    addText(div, "H1", heading);
+    var infos = texts.split(",");
+    var n = 0;
+    while (n < infos.length) {
+
+        var info = infos[n];
+        if (info.length > 0) {
+            addText(div, "P", info, onClick);
+        }
+
+        n++;
+    }
+
 }
 function addText(div, element, text, onClick) {
     var para = document.createElement(element);
@@ -404,11 +425,35 @@ function addText(div, element, text, onClick) {
 
     para.id = text;
     para.onclick = onClick;
+}
+function handleError(type) {
+    switch (type) {
 
 
+        case "a":
+            window.alert("The game room name is already taken");
+            break;
+    }
+}
+function setVisibilityMetaDivs(visibility) {
+    var frontdiv = document.getElementById("test");
+    // frontdiv.style.zIndex = "100";
 
+
+    var divsToHide = document.getElementsByClassName("metaInfo"); //divsToHide is an array
+    for (var i = 0; i < divsToHide.length; i++) {
+        // divsToHide[i].style.visibility = "hidden"; // or
+        divsToHide[i].style.display = visibility; // depending on what you're doing
+    }
+
+    var divsToHideToo = document.getElementsByClassName("texts"); //divsToHide is an array
+    for (var j = 0; j < divsToHideToo.length; j++) {
+        // divsToHide[i].style.visibility = "hidden"; // or
+        divsToHideToo[j].style.display = visibility; // depending on what you're doing
+    }
 }
 function setGameRoomselector(gameRoom) {
+    document.getElementById("joinRoom").disabled = false;
     if (gameRoomselector) {
         var oldHighlight = document.getElementById(gameRoomselector.id);
         oldHighlight.style.color = 'black';
@@ -467,17 +512,29 @@ function printArr(array) {
 
 function enterName() {
     var playerName = prompt("Please enter your name", "New Player");
-    sendAction(71 + playerName);
+    sendAction(71 + playerName.trim() + ";");
 }
 function gamePopup() {
+    var humanPlayers = document.getElementById("humanNrOfPlayers").value;
+    var computerPlayers = document.getElementById("computerNrOfPlayers").value;
     var gameName = prompt("Name of the game", "New Game");
-    sendAction(72 + gameName);
+    sendAction(72 + gameName + "," + humanPlayers + "," + computerPlayers + ";");
 }
 function joinGameRoom() {
 
     joinedGameRoom = gameRoomselector;
+    document.getElementById("startGame").disabled = false;
+    document.getElementById("joinRoom").disabled = true;
 
-    sendAction(73 + joinedGameRoom.id);
+    sendAction(73 + joinedGameRoom.id + ";");
+}
+function gameStart() {
+
+    joinedGameRoom = gameRoomselector;
+
+
+
+    sendAction(74 + joinedGameRoom.id + ";");
 }
 
 function sleep(milliseconds) {
@@ -487,4 +544,51 @@ function sleep(milliseconds) {
             break;
         }
     }
+}
+function disableButtons() {
+    document.getElementById("newGame").disabled = true;
+    document.getElementById("joinRoom").disabled = true;
+    document.getElementById("startGame").disabled = true;
+}
+
+function setOnchanges() {
+    document.getElementById("humanNrOfPlayers").onchange = function () {
+        humanChange()
+    };
+    document.getElementById("computerNrOfPlayers").onchange = function () {
+        computerChange()
+    };
+}
+function humanChange() {
+
+    var human = document.getElementById("humanNrOfPlayers");
+    var computer = document.getElementById("computerNrOfPlayers");
+
+    while (parseInt(human.value) + parseInt(computer.value) > 4) {
+
+        computer.value--;
+
+    }
+    activateNewGameButton();
+}
+function computerChange() {
+    var human = document.getElementById("humanNrOfPlayers");
+    var computer = document.getElementById("computerNrOfPlayers");
+
+    while (parseInt(computer.value) + parseInt(human.value) > 4) {
+
+        human.value--;
+    }
+    activateNewGameButton();
+}
+function activateNewGameButton() {
+    var human = document.getElementById("humanNrOfPlayers");
+    var computer = document.getElementById("computerNrOfPlayers");
+    if (parseInt(human.value) && parseInt(computer.value) || parseInt(human.value) && parseInt(computer.value) == 0) {
+        document.getElementById("newGame").disabled = false;
+    }
+}
+function mainMenu() {
+    setVisibilityMetaDivs('inline');
+    document.getElementById("canvasId").style.opacity = "0.4";
 }
