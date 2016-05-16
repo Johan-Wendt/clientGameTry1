@@ -38,14 +38,15 @@ body, html {
 }
 
 
+
 #joinedGameRoomInfo {
     position: absolute;
     top: 50px;
     left: 50px;
     width: 200px;
     height: 500px;
-    border: 3px solid #73AD21;
-
+}
+    /**
     background-image: url("Pictures/dry.jpg");
 
     border-left: 10px solid #ccc;
@@ -53,6 +54,7 @@ body, html {
     border-right: 10px solid #000;
     border-bottom: 10px solid #000;
 }
+**/
 #buttonContainer2 {
     position: absolute;
     bottom:   0;
@@ -169,6 +171,16 @@ body, html {
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
 }
+#escMenu {
+    position:absolute;
+    top:50%;
+    left:50%;
+    //padding:15px;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
 
 button {
 
@@ -193,11 +205,14 @@ button:disabled {
 }
 
 select {
+    display: table;
+    width: 100%;
+
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
-    width: 180px;
+   // width: 170px;
     height: 24px;
     overflow: hidden;
     // background: url("Pictures/AppleSeed.png") no-repeat right #ddd;
@@ -224,4 +239,21 @@ h2 {
     color: #f2f2f2; background: #b48608; font-size: 24px; line-height: 23px; 
     font-weight: 700; margin: 0 2px 8px; float: left; padding: 4px;
     margin: 0 2px 8px; font-family: 'Libre Baskerville', serif; display: block;
+}
+
+h3 { 
+    color: #f2f2f2; background: #b48608; font-size: 24px; line-height: 23px; 
+    font-weight: 700; margin: 0 2px 8px; float: left; padding: 4px;
+    margin: 0 2px 8px; font-family: 'Libre Baskerville', serif; display: block;
+}
+
+.outerContainer {
+    
+
+    background-image: url("Pictures/dry.jpg");
+
+    border-left: 10px solid #ccc;
+    border-top: 10px solid #ccc;
+    border-right: 10px solid #000;
+    border-bottom: 10px solid #000;
 }

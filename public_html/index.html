@@ -12,53 +12,56 @@
 
         <div id="masterContainer">
             <canvas id="canvasId" width="800" height="600"></canvas>
+            <div id="menuContainer">
 
 
-            <div class="texts" id="playerInfoOuter">
-                <div class="texts" id="playerInfo"><h1>Players</h1></div>
-                    <div class="innerLower" id="myName"></div>
-                
-            </div>
+                <div class="outerContainer" id="playerInfoOuter">
+                    <div class="texts" id="playerInfo"><h1>Players</h1></div>
+                    <div class="innerLowerContainer" id="myName"></div>
 
-            <div class="metaInfo" id="gameRoomInfo">
-                <div class="texts" id="gameRoomInfoText"><h1>Game Rooms</h1></div>
-                <div class="metaInfo" id="buttonContainer">
-                    <button id="joinRoom" onclick="joinGameRoom()">Join Room</button>
                 </div>
 
-                <div class="metaInfo" id="newGameContainer">
+                <div class="outerContainer" id="gameRoomInfo">
+                    <div class="innerUpperContainer" id="gameRoomInfoText"><h1>Game Rooms</h1></div>
+                    <div class="innerLowerContainer" id="buttonContainer">
+                        <button id="joinRoom" onclick="joinGameRoom()">Join Room</button>
+                    </div>
 
-                    <select id="humanNrOfPlayers">
-                        <option selected disabled>Number of human players</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        <option value="4">Four</option>
-                    </select>
-                    <div class="styled-select">
+                    <div class="metaInfo" id="newGameContainer">
+
+                        <select id="humanNrOfPlayers">
+                            <option selected disabled>Human players</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                            <option value="4">Four</option>
+                        </select>
                         <select id="computerNrOfPlayers">
 
-                            <option class="service-small" selected disabled>Number of computer players</option>
+                            <option class="service-small" selected disabled>Computer players</option>
                             <option value="0">None</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </select>
+                        <button id="newGame" onclick="gamePopup()">New Game</button>
                     </div>
-                    <button id="newGame" onclick="gamePopup()">New Game</button>
                 </div>
-            </div>
 
-            <div class="metaInfo" id="joinedGameRoomInfo">
-                <div class="texts" id="joinedGameRoomText"><h1>Joined Room</h1></div>
-                <div class="metaInfo" id="buttonContainer2">
-                    <h2 id="mygameRoom"></h2>
-                    <button id="startGame" onclick="gameStart()">Start Game</button>
+                <div class="outerContainer" id="joinedGameRoomInfo">
+                    <div class="innerUpperContainer" id="joinedGameRoomText"><h1>Joined Room</h1></div>
+                    <div class="innerLowerContainer" id="buttonContainer2">
+                        <h2 id="mygameRoom"></h2>
+                        <button id="startGame" onclick="gameStart()">Start Game</button>
+                    </div>
                 </div>
             </div>
             <div id="weaponInfo"></div>
 
         </div>
-
+        <div id="escMenu">
+            <h3 id="quitGame">Quit Game</h3>
+            <h3 id="resumeGame">Resume Game</h3>
+        </div>
     </body>
 </html>

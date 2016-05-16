@@ -13,10 +13,10 @@ var pauseCode = 80;
 var joinCode = 74;
 //n
 var createCode = 78;
-
-
 //w
 var messageCode = 87;
+//esc
+var escCode = 27;
 
 var playerNumber = 1;
 
@@ -73,6 +73,7 @@ function windowReady() {
     window.addEventListener("keydown", this.check, false);
     roomContent = document.getElementById("joinedGameRoomText");
     gameRooms = document.getElementById("gameRoomInfoText");
+    document.getElementById("escMenu").style.display = 'none';
 
     loadImages();
     createPlayers();
@@ -81,6 +82,7 @@ function windowReady() {
     setInterval(draw, 1000 / fps);
     disableButtons();
     setOnchanges();
+    setOnClicks();
 
     enterName();
 }
@@ -103,6 +105,10 @@ ws.onerror = function (err) {
 };
 window.onbeforeunload = function () {
     sendAction(92);
+    sleep(1000);
+};
+window.onpopstate = function(event) {
+sendAction(92);
     sleep(1000);
 };
 
@@ -161,8 +167,16 @@ function check(e) {
         case joinCode:
             sendAction(55);
             break;
-        case createCode:
-            sendAction(81);
+        case escCode:
+            if (gameRunning) {
+                var escMenu = document.getElementById("escMenu");
+                if (escMenu.style.display == 'inline') {
+                    escMenu.style.display = 'none';
+                }
+                else {
+                    escMenu.style.display = 'inline';
+                }
+            }
             break;
     }
 }
@@ -311,8 +325,7 @@ function handleSwitcher(arr) {
             break;
 
         case 6:
-            console.log("Called");
-            mainMenu();
+            quitGame();
             break;
 
     }
@@ -436,21 +449,29 @@ function handleError(type) {
     }
 }
 function setVisibilityMetaDivs(visibility) {
-    var frontdiv = document.getElementById("test");
+    
+   // var frontdiv = document.getElementById("test");
     // frontdiv.style.zIndex = "100";
 
 
-    var divsToHide = document.getElementsByClassName("metaInfo"); //divsToHide is an array
+    var divsToHide = document.getElementsByClassName("outerContainer"); //divsToHide is an array
     for (var i = 0; i < divsToHide.length; i++) {
         // divsToHide[i].style.visibility = "hidden"; // or
         divsToHide[i].style.display = visibility; // depending on what you're doing
     }
 
-    var divsToHideToo = document.getElementsByClassName("texts"); //divsToHide is an array
+    var divsToHideToo = document.getElementsByClassName("innerUpperContainer"); //divsToHide is an array
     for (var j = 0; j < divsToHideToo.length; j++) {
         // divsToHide[i].style.visibility = "hidden"; // or
         divsToHideToo[j].style.display = visibility; // depending on what you're doing
     }
+    
+    var divsToHideLastly = document.getElementsByClassName("innerLowerContainer"); //divsToHide is an array
+    for (var j = 0; j < divsToHideToo.length; j++) {
+        // divsToHide[i].style.visibility = "hidden"; // or
+        divsToHideLastly[j].style.display = visibility; // depending on what you're doing
+    }
+    
 }
 function setGameRoomselector(gameRoom) {
     document.getElementById("joinRoom").disabled = false;
@@ -553,11 +574,12 @@ function disableButtons() {
 
 function setOnchanges() {
     document.getElementById("humanNrOfPlayers").onchange = function () {
-        humanChange()
+        humanChange();
     };
     document.getElementById("computerNrOfPlayers").onchange = function () {
-        computerChange()
+        computerChange();
     };
+
 }
 function humanChange() {
 
@@ -591,4 +613,18 @@ function activateNewGameButton() {
 function mainMenu() {
     setVisibilityMetaDivs('inline');
     document.getElementById("canvasId").style.opacity = "0.4";
+}
+function quitGame() {
+    mainMenu();
+    gameRunning = false;
+    document.getElementById("escMenu").style.display = 'none';
+}
+
+function setOnClicks() {
+    document.getElementById("quitGame").onclick = function () {
+        sendAction(55);
+    };
+    document.getElementById("resumeGame").onclick = function () {
+        document.getElementById("escMenu").style.display = 'none';
+    };
 }
