@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://127.0.0.1:9025/");
+var ws = new WebSocket("ws://127.0.0.1:9026/");
 ws.binaryType = 'arraybuffer';
 
 var leftCode = 37;
@@ -395,7 +395,7 @@ function handleGameMetaInfo(instructions) {
             break;
 
         case "n":
-            addText(document.getElementById("myName"), "H2", cleanInstructions);
+        //    addText(document.getElementById("myName"), "H2", cleanInstructions);
             break;
         case "c":
             if (cleanInstructions == 0) {

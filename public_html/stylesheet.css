@@ -184,15 +184,17 @@ h3 {
     border-bottom: 10px solid #000;
     background-image: url("Pictures/dry.jpg");
 }
+
 .innerUpperContainer {
     position: absolute;
     top:   0;
     left:   0;
-    height: 410px;
+    height: 400px;
     width: 100%;
     //width: 200px;
-    overflow: scroll;
+    overflow-y: auto;
 }
+
 .innerMiddleContainer {
     width: 100%;
 }
