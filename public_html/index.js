@@ -107,8 +107,8 @@ window.onbeforeunload = function () {
     sendAction(92);
     sleep(1000);
 };
-window.onpopstate = function(event) {
-sendAction(92);
+window.onpopstate = function (event) {
+    sendAction(92);
     sleep(1000);
 };
 
@@ -449,8 +449,8 @@ function handleError(type) {
     }
 }
 function setVisibilityMetaDivs(visibility) {
-    
-   // var frontdiv = document.getElementById("test");
+
+    // var frontdiv = document.getElementById("test");
     // frontdiv.style.zIndex = "100";
 
 
@@ -465,19 +465,21 @@ function setVisibilityMetaDivs(visibility) {
         // divsToHide[i].style.visibility = "hidden"; // or
         divsToHideToo[j].style.display = visibility; // depending on what you're doing
     }
-    
+
     var divsToHideLastly = document.getElementsByClassName("innerLowerContainer"); //divsToHide is an array
     for (var j = 0; j < divsToHideToo.length; j++) {
         // divsToHide[i].style.visibility = "hidden"; // or
         divsToHideLastly[j].style.display = visibility; // depending on what you're doing
     }
-    
+
 }
 function setGameRoomselector(gameRoom) {
     document.getElementById("joinRoom").disabled = false;
     if (gameRoomselector) {
         var oldHighlight = document.getElementById(gameRoomselector.id);
-        oldHighlight.style.color = 'black';
+        if (oldHighlight) {
+            oldHighlight.style.color = 'white';
+        }
     }
     gameRoomselector = gameRoom;
     var newHighlight = document.getElementById(gameRoom.id);
