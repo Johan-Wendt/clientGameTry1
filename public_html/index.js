@@ -328,6 +328,9 @@ function handleSwitcher(arr) {
         case 6:
             quitGame();
             break;
+        case 7:
+            console.log("play a sound");
+            break;
 
     }
     //}
@@ -396,7 +399,7 @@ function handleGameMetaInfo(instructions) {
             break;
 
         case "n":
-        //    addText(document.getElementById("myName"), "H2", cleanInstructions);
+            //    addText(document.getElementById("myName"), "H2", cleanInstructions);
             break;
         case "c":
             if (cleanInstructions == 0) {
