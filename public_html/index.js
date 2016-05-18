@@ -76,6 +76,7 @@ function windowReady() {
     document.getElementById("escMenu").style.display = 'none';
 
     loadImages();
+    loadSounds();
     createPlayers();
     createBonuses();
     createBullets();
@@ -629,4 +630,8 @@ function setOnClicks() {
     document.getElementById("resumeGame").onclick = function () {
         document.getElementById("escMenu").style.display = 'none';
     };
+}
+function loadSounds() {
+    var snd = new Audio("Sounds/background.wav"); // buffers automatically when created
+    snd.play();
 }
