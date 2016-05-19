@@ -57,6 +57,8 @@ var roomContent;
 var gameRooms;
 var gameBackgound;
 
+var bonusSound;
+
 
 
 
@@ -330,6 +332,7 @@ function handleSwitcher(arr) {
             break;
         case 7:
             console.log("play a sound");
+            bonusSound.play();
             break;
 
     }
@@ -635,6 +638,9 @@ function setOnClicks() {
     };
 }
 function loadSounds() {
-    var snd = new Audio("Sounds/background.wav"); // buffers automatically when created
-    snd.play();
+    var background = new Audio("Sounds/background.wav"); 
+    background.volume = 0.2;
+    background.play();
+    
+    bonusSound = new Audio("Sounds/bounce.wav"); 
 }
