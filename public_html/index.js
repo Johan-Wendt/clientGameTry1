@@ -58,6 +58,8 @@ var gameRooms;
 var gameBackgound;
 
 var bonusSound;
+var startSound;
+var crashSound;
 
 
 
@@ -310,6 +312,7 @@ function handleSwitcher(arr) {
             setVisibilityMetaDivs('none');
             document.getElementById("mygameRoom").innerHTML = "";
             document.getElementById("canvasId").style.opacity = "1";
+            startSound.play();
             break;
         case 1:
             clearOldPositions(plays);
@@ -331,8 +334,7 @@ function handleSwitcher(arr) {
             quitGame();
             break;
         case 7:
-            console.log("play a sound");
-            bonusSound.play();
+            handleSound(arr);
             break;
 
     }
@@ -341,6 +343,20 @@ function handleSwitcher(arr) {
 function getNextActInstructions(arr) {
     return arr.splice(0, 7);
 
+}
+function handleSound(sounds) {
+    while (sounds.length > 0) {
+        var theSound = sounds.shift();
+
+        switch (theSound) {
+            case 2:
+                bonusSound.play();
+                break;
+            case 1:
+                crashSound.play();
+                break;
+        }
+    }
 }
 function handlePositioning(moves, type) {
 
@@ -638,9 +654,11 @@ function setOnClicks() {
     };
 }
 function loadSounds() {
-    var background = new Audio("Sounds/background.wav"); 
+    var background = new Audio("Sounds/background.wav");
     background.volume = 0.2;
     background.play();
-    
-    bonusSound = new Audio("Sounds/bounce.wav"); 
+
+    bonusSound = new Audio("Sounds/bloink.wav");
+    startSound = new Audio("Sounds/start.wav");
+    crashSound = new Audio("Sounds/crash.wav");
 }
