@@ -40,6 +40,7 @@ var fps = 60;
 var pistolBonus;
 var shotgunBonus;
 var player1;
+var player1Tail;
 var player2;
 var fastBonus;
 var growBonus;
@@ -130,6 +131,8 @@ function loadImages() {
     shotgunBonus.src = 'Pictures/Watermelon.png';
     player1 = new Image(18, 23);
     player1.src = 'Pictures/Player1.png';
+    player1Tail = new Image(18, 23);
+    player1Tail.src = 'Pictures/Player1Tail.png';
     player2 = new Image(18, 23);
     player2.src = 'Pictures/Player2.png';
     gameRoomBackground = new Image(200, 400);
@@ -170,7 +173,7 @@ function check(e) {
             break;
 
         case joinCode:
-            sendAction(55);
+          //  sendAction(55);
             break;
         case escCode:
             if (gameRunning) {
@@ -230,7 +233,7 @@ function handleIncommingData(evt) {
     }
 }
 
-function pixel(I) {
+function actor(I) {
     //   I.color = I.col;
  //   I.image = I.image;
     I.x = [];
@@ -244,7 +247,36 @@ function pixel(I) {
         context.fillStyle = this.color;
         var n = 0;
 
-        while (n < this.x.length) {
+     //   while (n < this.x.length) {
+       //     if (this.x[n] >= 0) {
+                drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+
+         //   }
+      //     n++;
+
+    //    }
+    };
+    return I;
+}
+
+function actorLong(I, B, G) {
+    //   I.color = I.col;
+ //   I.image = I.image;
+    I.x = [];
+    I.y = [];
+    I.width = [];
+    I.height = [];
+    I.rotation = [];
+    I.shape = [];
+
+    I.draw = function () {
+        context.fillStyle = this.color;
+        
+        var n = 0;
+        drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+        n++;
+
+        while (n < this.x.length - 1) {
             if (this.x[n] >= 0) {
                 drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
 
@@ -252,6 +284,8 @@ function pixel(I) {
             n++;
 
         }
+        drawRotatedImage(this.tail, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+        n++;
     };
     return I;
 }
@@ -510,28 +544,28 @@ function setGameRoomselector(gameRoom) {
 }
 
 function createPlayers() {
-    plays.push(pixel({image: player1}, {head: growBonus}, {tail: growBonus}));
-    plays.push(pixel({image: player2}, {head: growBonus}, {tail: growBonus}));
-    plays.push(pixel({image: player1}, {head: growBonus}, {tail: growBonus}));
-    plays.push(pixel({image: player1}, {head: growBonus}, {tail: growBonus}));
+    plays.push(actorLong({image: player1, head: player1Tail, tail: player1Tail}));
+    plays.push(actorLong({image: player2, head: growBonus, tail: growBonus}));
+    plays.push(actorLong({image: player1, head: growBonus, tail: growBonus}));
+    plays.push(actorLong({image: player2, head: growBonus, tail: growBonus}));
 }
 
 function createBonuses() {
-    bonuses.push(pixel({image: growBonus}));
-    bonuses.push(pixel({image: fastBonus}));
-    bonuses.push(pixel({image: pistolBonus}));
-    bonuses.push(pixel({image: shotgunBonus}));
-    bonuses.push(pixel({image: shotgunBonus}));
-    bonuses.push(pixel({image: shotgunBonus}));
+    bonuses.push(actor({image: growBonus}));
+    bonuses.push(actor({image: fastBonus}));
+    bonuses.push(actor({image: pistolBonus}));
+    bonuses.push(actor({image: shotgunBonus}));
+    bonuses.push(actor({image: shotgunBonus}));
+    bonuses.push(actor({image: shotgunBonus}));
 
 }
 function createBullets() {
-    bullets.push(pixel({image: bullet}));
-    bullets.push(pixel({image: bullet}));
-    bullets.push(pixel({image: bullet}));
-    bullets.push(pixel({image: shotgunBonus}));
-    bullets.push(pixel({image: shotgunBonus}));
-    bullets.push(pixel({image: shotgunBonus}));
+    bullets.push(actor({image: bullet}));
+    bullets.push(actor({image: bullet}));
+    bullets.push(actor({image: bullet}));
+    bullets.push(actor({image: shotgunBonus}));
+    bullets.push(actor({image: shotgunBonus}));
+    bullets.push(actor({image: shotgunBonus}));
 
 }
 function getWeaponName(weaponInt) {
