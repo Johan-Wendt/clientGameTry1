@@ -232,7 +232,7 @@ function handleIncommingData(evt) {
 
 function pixel(I) {
     //   I.color = I.col;
-    I.image = I.image;
+ //   I.image = I.image;
     I.x = [];
     I.y = [];
     I.width = [];
@@ -246,7 +246,7 @@ function pixel(I) {
 
         while (n < this.x.length) {
             if (this.x[n] >= 0) {
-                drawRotatedRect(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+                drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
 
             }
             n++;
@@ -256,7 +256,7 @@ function pixel(I) {
     return I;
 }
 
-function drawRotatedRect(image, x, y, width, height, degrees) {
+function drawRotatedImage(image, x, y, width, height, degrees) {
     // first save the untranslated/unrotated context
     context.save();
 
@@ -510,10 +510,10 @@ function setGameRoomselector(gameRoom) {
 }
 
 function createPlayers() {
-    plays.push(pixel({image: player1}));
-    plays.push(pixel({image: player2}));
-    plays.push(pixel({image: player1}));
-    plays.push(pixel({image: player1}));
+    plays.push(pixel({image: player1}, {head: growBonus}, {tail: growBonus}));
+    plays.push(pixel({image: player2}, {head: growBonus}, {tail: growBonus}));
+    plays.push(pixel({image: player1}, {head: growBonus}, {tail: growBonus}));
+    plays.push(pixel({image: player1}, {head: growBonus}, {tail: growBonus}));
 }
 
 function createBonuses() {
