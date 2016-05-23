@@ -133,6 +133,8 @@ function loadImages() {
     player1.src = 'Pictures/Player1.png';
     player1Tail = new Image(18, 23);
     player1Tail.src = 'Pictures/Player1Tail.png';
+    player1Head = new Image(18, 23);
+    player1Head.src = 'Pictures/Player1Head.png';
     player2 = new Image(18, 23);
     player2.src = 'Pictures/Player2.png';
     gameRoomBackground = new Image(200, 400);
@@ -544,7 +546,7 @@ function setGameRoomselector(gameRoom) {
 }
 
 function createPlayers() {
-    plays.push(actorLong({image: player1, head: player1Tail, tail: player1Tail}));
+    plays.push(actorLong({image: player1, head: player1Head, tail: player1Tail}));
     plays.push(actorLong({image: player2, head: growBonus, tail: growBonus}));
     plays.push(actorLong({image: player1, head: growBonus, tail: growBonus}));
     plays.push(actorLong({image: player2, head: growBonus, tail: growBonus}));
