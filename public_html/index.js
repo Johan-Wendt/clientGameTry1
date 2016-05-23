@@ -121,22 +121,39 @@ window.onpopstate = function (event) {
 function loadImages() {
     bullet = new Image(20, 9);
     bullet.src = 'Pictures/AppleSeed.png';
-    growBonus = new Image(44, 59);
+    growBonus = new Image(30, 40);
     growBonus.src = 'Pictures/Mushroom.png';
-    fastBonus = new Image(46, 53);
+    fastBonus = new Image(40, 35);
     fastBonus.src = 'Pictures/Coffee.png';
-    pistolBonus = new Image(40, 51);
+    pistolBonus = new Image(31, 40);
     pistolBonus.src = 'Pictures/Apple.png';
-    shotgunBonus = new Image(60, 33);
+    shotgunBonus = new Image(40, 22);
     shotgunBonus.src = 'Pictures/Watermelon.png';
     player1 = new Image(18, 23);
     player1.src = 'Pictures/Player1.png';
-    player1Tail = new Image(18, 23);
+    player1Tail = new Image(20, 21);
     player1Tail.src = 'Pictures/Player1Tail.png';
-    player1Head = new Image(18, 23);
+    player1Head = new Image(20, 29);
     player1Head.src = 'Pictures/Player1Head.png';
     player2 = new Image(18, 23);
     player2.src = 'Pictures/Player2.png';
+    player2Tail = new Image(20, 21);
+    player2Tail.src = 'Pictures/Player2Tail.png';
+    player2Head = new Image(20, 29);
+    player2Head.src = 'Pictures/Player2Head.png';
+    player3 = new Image(18, 23);
+    player3.src = 'Pictures/Player3.png';
+    player3Tail = new Image(20, 21);
+    player3Tail.src = 'Pictures/Player3Tail.png';
+    player3Head = new Image(20, 29);
+    player3Head.src = 'Pictures/Player3Head.png';
+    player4 = new Image(18, 23);
+    player4.src = 'Pictures/Player4.png';
+    player4Tail = new Image(20, 21);
+    player4Tail.src = 'Pictures/Player4Tail.png';
+    player4Head = new Image(20, 29);
+    player4Head.src = 'Pictures/Player4Head.png';
+    
     gameRoomBackground = new Image(200, 400);
     gameRoomBackground.id = "gameRoomBackground";
     gameRoomBackground.src = 'Pictures/Coffee.png';
@@ -275,7 +292,7 @@ function actorLong(I, B, G) {
         context.fillStyle = this.color;
         
         var n = 0;
-        drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+       // drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
         n++;
 
         while (n < this.x.length - 1) {
@@ -288,6 +305,7 @@ function actorLong(I, B, G) {
         }
         drawRotatedImage(this.tail, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
         n++;
+        drawRotatedImage(this.head, this.x[0], this.y[0], this.image.width, this.image.height, this.rotation[0] * 30);
     };
     return I;
 }
@@ -547,9 +565,9 @@ function setGameRoomselector(gameRoom) {
 
 function createPlayers() {
     plays.push(actorLong({image: player1, head: player1Head, tail: player1Tail}));
-    plays.push(actorLong({image: player2, head: growBonus, tail: growBonus}));
-    plays.push(actorLong({image: player1, head: growBonus, tail: growBonus}));
-    plays.push(actorLong({image: player2, head: growBonus, tail: growBonus}));
+    plays.push(actorLong({image: player2, head: player2Head, tail: player2Tail}));
+    plays.push(actorLong({image: player3, head: player3Head, tail: player3Tail}));
+    plays.push(actorLong({image: player4, head: player4Head, tail: player4Tail}));
 }
 
 function createBonuses() {
