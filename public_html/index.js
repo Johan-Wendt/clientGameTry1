@@ -267,10 +267,10 @@ function actor(I) {
         var n = 0;
 
         //   while (n < this.x.length) {
-        //     if (this.x[n] >= 0) {
-        drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+        if (this.x.length > 0) {
+            drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
 
-        //   }
+        }
         //     n++;
 
         //    }
@@ -289,24 +289,26 @@ function actorLong(I) {
     I.shape = [];
 
     I.draw = function () {
-        context.fillStyle = this.color;
+        if (this.x.length > 0) {
+            context.fillStyle = this.color;
 
-        drawRotatedImage(this.tail, this.x[this.x.length - 1], this.y[this.x.length - 1], this.tail.width, this.tail.height, this.rotation[this.x.length - 1] * 30);
-        // drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
-        //   n++;
+            drawRotatedImage(this.tail, this.x[this.x.length - 1], this.y[this.x.length - 1], this.tail.width, this.tail.height, this.rotation[this.x.length - 1] * 30);
+            // drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+            //   n++;
 
-        var n = 1;
-        while (n < this.x.length - 1) {
-            if (this.x[n] >= 0) {
-                drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+            var n = 1;
+            while (n < this.x.length - 1) {
+                if (this.x[n] >= 0) {
+                    drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+
+                }
+                n++;
 
             }
-            n++;
-
+            // drawRotatedImage(this.tail, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+            //  n++;
+            drawRotatedImage(this.head, this.x[0], this.y[0], this.head.width, this.head.height, this.rotation[0] * 30);
         }
-        // drawRotatedImage(this.tail, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
-        //  n++;
-        drawRotatedImage(this.head, this.x[0], this.y[0], this.head.width, this.head.height, this.rotation[0] * 30);
     };
     return I;
 }
@@ -374,6 +376,7 @@ function handleSwitcher(arr) {
             handlePositioning(arr, plays);
             break;
         case 2:
+            // printArr(arr);
             clearOldPositions(bonuses);
             handlePositioning(arr, bonuses);
             break;
@@ -418,7 +421,6 @@ function handlePositioning(moves, type) {
     // printArr(moves);
     while (moves.length > 6) {
 
-        // printArr(moves);
         var subType = moves.shift();
 
         type[subType - 1].x[type[subType - 1].x.length] = moves.shift();

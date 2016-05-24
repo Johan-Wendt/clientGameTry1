@@ -1,0 +1,18 @@
+Tools/Color tools/Colorize
+
+Player 2
+Hue 160
+Satauration 100 
+Lightness 0 
+
+
+Player 3
+Hue 230
+Satauration 70 
+Lightness -10
+
+
+Player 4
+Hue 120
+Satauration 50 
+Lightness 5
