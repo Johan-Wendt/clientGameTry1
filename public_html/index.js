@@ -123,7 +123,7 @@ function loadImages() {
     bullet.src = 'Pictures/AppleSeed.png';
     growBonus = new Image(30, 40);
     growBonus.src = 'Pictures/Mushroom.png';
-    fastBonus = new Image(40, 35);
+    fastBonus = new Image(35, 40);
     fastBonus.src = 'Pictures/Coffee.png';
     pistolBonus = new Image(31, 40);
     pistolBonus.src = 'Pictures/Apple.png';
@@ -131,9 +131,9 @@ function loadImages() {
     shotgunBonus.src = 'Pictures/Watermelon.png';
     player1 = new Image(18, 23);
     player1.src = 'Pictures/Player1.png';
-    player1Tail = new Image(20, 21);
+    player1Tail = new Image(18, 25);
     player1Tail.src = 'Pictures/Player1Tail.png';
-    player1Head = new Image(20, 29);
+    player1Head = new Image(18, 21);
     player1Head.src = 'Pictures/Player1Head.png';
     player2 = new Image(18, 23);
     player2.src = 'Pictures/Player2.png';
@@ -153,7 +153,7 @@ function loadImages() {
     player4Tail.src = 'Pictures/Player4Tail.png';
     player4Head = new Image(20, 29);
     player4Head.src = 'Pictures/Player4Head.png';
-    
+
     gameRoomBackground = new Image(200, 400);
     gameRoomBackground.id = "gameRoomBackground";
     gameRoomBackground.src = 'Pictures/Coffee.png';
@@ -192,7 +192,7 @@ function check(e) {
             break;
 
         case joinCode:
-          //  sendAction(55);
+            //  sendAction(55);
             break;
         case escCode:
             if (gameRunning) {
@@ -254,7 +254,7 @@ function handleIncommingData(evt) {
 
 function actor(I) {
     //   I.color = I.col;
- //   I.image = I.image;
+    //   I.image = I.image;
     I.x = [];
     I.y = [];
     I.width = [];
@@ -266,21 +266,21 @@ function actor(I) {
         context.fillStyle = this.color;
         var n = 0;
 
-     //   while (n < this.x.length) {
-       //     if (this.x[n] >= 0) {
-                drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+        //   while (n < this.x.length) {
+        //     if (this.x[n] >= 0) {
+        drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
 
-         //   }
-      //     n++;
+        //   }
+        //     n++;
 
-    //    }
+        //    }
     };
     return I;
 }
 
-function actorLong(I, B, G) {
+function actorLong(I) {
     //   I.color = I.col;
- //   I.image = I.image;
+    //   I.image = I.image;
     I.x = [];
     I.y = [];
     I.width = [];
@@ -290,11 +290,12 @@ function actorLong(I, B, G) {
 
     I.draw = function () {
         context.fillStyle = this.color;
-        
-        var n = 0;
-       // drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
-        n++;
 
+        drawRotatedImage(this.tail, this.x[this.x.length - 1], this.y[this.x.length - 1], this.tail.width, this.tail.height, this.rotation[this.x.length - 1] * 30);
+        // drawRotatedImage(this.head, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+        //   n++;
+
+        var n = 1;
         while (n < this.x.length - 1) {
             if (this.x[n] >= 0) {
                 drawRotatedImage(this.image, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
@@ -303,9 +304,9 @@ function actorLong(I, B, G) {
             n++;
 
         }
-        drawRotatedImage(this.tail, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
-        n++;
-        drawRotatedImage(this.head, this.x[0], this.y[0], this.image.width, this.image.height, this.rotation[0] * 30);
+        // drawRotatedImage(this.tail, this.x[n], this.y[n], this.image.width, this.image.height, this.rotation[n] * 30);
+        //  n++;
+        drawRotatedImage(this.head, this.x[0], this.y[0], this.head.width, this.head.height, this.rotation[0] * 30);
     };
     return I;
 }
@@ -571,8 +572,8 @@ function createPlayers() {
 }
 
 function createBonuses() {
-    bonuses.push(actor({image: growBonus}));
     bonuses.push(actor({image: fastBonus}));
+    bonuses.push(actor({image: growBonus}));
     bonuses.push(actor({image: pistolBonus}));
     bonuses.push(actor({image: shotgunBonus}));
     bonuses.push(actor({image: shotgunBonus}));
